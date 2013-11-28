@@ -43,19 +43,21 @@ public class GLEpgViewRenderer extends GLRenderer {
         float px_H = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, //Convert to dp value
                 180f, //px value
                 r.getDisplayMetrics());
-        float aspectRatio_W = (float)width/px_W/2f;
-        float aspectRatio_H = (float)height/px_H/2f;
+        float aspectRatio_W = (float)width;
+        float aspectRatio_H = (float)height;
 
         float[] projectionMatrix = new float[16];
+
         orthoM(projectionMatrix, 0, -aspectRatio_W, aspectRatio_W, -aspectRatio_H, aspectRatio_H, -1f, 1f);
-        float[] projectionMatrix2 = new float[16];
-        orthoM(projectionMatrix2, 0, -aspectRatio_H, aspectRatio_H, -aspectRatio_W, aspectRatio_W, -1f, 1f);
-//        for(int i = 0; i<4; i++){
-//            String str = "";
-//            for(int j = 0; j<4; j++)
-//                str += (projectionMatrix[i*4+j] + " ");
-//            Log.d(TAG, "init: " + str);
-//        }
+//        float[] projectionMatrix2 = new float[16];
+//        orthoM(projectionMatrix2, 0, -aspectRatio_H, aspectRatio_H, -aspectRatio_W, aspectRatio_W, -1f, 1f);
+        Log.d(TAG, "init: aspectRatio_W = " + aspectRatio_W + " aspectRatio_H = " + aspectRatio_H);
+        for(int i = 0; i<4; i++){
+            String str = "";
+            for(int j = 0; j<4; j++)
+                str += (projectionMatrix[i*4+j] + " ");
+            Log.d(TAG, "init: " + str);
+        }
 
         mGLEventView = new GLEventView(mContext);
         mGLEventView.bind(

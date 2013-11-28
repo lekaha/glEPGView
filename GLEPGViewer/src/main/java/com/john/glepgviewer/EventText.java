@@ -8,7 +8,6 @@ import android.content.Context;
 public abstract class EventText extends EventComponent {
     protected final static int POSITION_COMPONENT_COUNT = 2;
     protected final static int TEXTURE_COMPONENT_COUNT = 2;
-    protected final static int
     protected final static int U = 2, V = 3;
     protected final static String BIG_TEXT_COLOR = "#ffffffff";
     protected final static String SMALL_TEXT_COLOR = "#ff828282";

@@ -11,20 +11,6 @@ import android.util.TypedValue;
  */
 public class EventDescription extends EventText {
 
-//    protected float[] VERTEX_DATA = {
-//            // Triangle Fan: Time minute text block
-//            0.0f, 0.1528f, 0.4625f, 0.25f,
-//            -0.45f, 0.0833f, 0.0f, 0.5f,
-//            0.45f, 0.0833f, 0.925f, 0.5f,
-//            0.45f, 0.2222f, 0.925f, 0.0f,
-//            -0.45f, 0.2222f, 0.0f, 0.0f,
-//            -0.45f, 0.0833f, 0.0f, 0.5f
-//    };
-
-//    protected static final int POSITION_COMPONENT_COUNT = 2;
-//    protected static final int TEXTURE_COMPONENT_COUNT = 2;
-//    protected VertexArray vertexArray;
-
     @Override
     protected void init(boolean nothing){
         float[] vertexData = {
@@ -67,7 +53,7 @@ public class EventDescription extends EventText {
 
         //Pre-load number of lines
         int line = GLTextView.StringFormat(title, (int)(width), (int)(size)).length;
-        float h = VERTEX_DATA[0 * 4 + 1] - VERTEX_DATA[1 * 4 + 1];
+        float h = VERTEX_DATA[0 * DIMENSION + 1] - VERTEX_DATA[1 * DIMENSION + 1];
         float bound = upper - (h * 2f * line);
         float d = (upper + bound)/2f;
         int frontColor = Color.parseColor(SMALL_TEXT_COLOR);
@@ -86,10 +72,10 @@ public class EventDescription extends EventText {
             Log.d(TAG, "init: Case1");
             bound = upper;
             d = upper;
-            VERTEX_DATA[0 * 4 + V] = 0.0f;
-            VERTEX_DATA[1 * 4 + V] = 0.0f;
-            VERTEX_DATA[2 * 4 + V] = 0.0f;
-            VERTEX_DATA[5 * 4 + V] = 0.0f;
+            VERTEX_DATA[0 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[1 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[2 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[5 * DIMENSION + V] = 0.0f;
         }
         else if( bound <= lower){
             Log.d(TAG, "init: Case2");
@@ -98,10 +84,10 @@ public class EventDescription extends EventText {
 //            upper += 0.05f;
             bound = lower;
             d = (upper + bound)/2f;
-            VERTEX_DATA[0 * 4 + V] = r/2f;
-            VERTEX_DATA[1 * 4 + V] = r;
-            VERTEX_DATA[2 * 4 + V] = r;
-            VERTEX_DATA[5 * 4 + V] = r;
+            VERTEX_DATA[0 * DIMENSION + V] = r/2f;
+            VERTEX_DATA[1 * DIMENSION + V] = r;
+            VERTEX_DATA[2 * DIMENSION + V] = r;
+            VERTEX_DATA[5 * DIMENSION + V] = r;
 
 //            Log.d(TAG, "init: r=" + r);
 //            Log.d(TAG, "init: upper-" + VERTEX_DATA[3 * 4 + 1] + " center-" + VERTEX_DATA[0 * 4 + 1] + " lower-" + VERTEX_DATA[1 * 4 + 1]);
@@ -113,25 +99,25 @@ public class EventDescription extends EventText {
 
             d = (upper + bound)/2f;
 
-            VERTEX_DATA[1 * 4 + V] = 1.1f;
-            VERTEX_DATA[2 * 4 + V] = 1.1f;
-            VERTEX_DATA[5 * 4 + V] = 1.1f;
-            VERTEX_DATA[3 * 4 + V] = 0.0f;
-            VERTEX_DATA[4 * 4 + V] = 0.0f;
-            VERTEX_DATA[0 * 4 + V] = 0.55f;
+            VERTEX_DATA[1 * DIMENSION + V] = 1.1f;
+            VERTEX_DATA[2 * DIMENSION + V] = 1.1f;
+            VERTEX_DATA[5 * DIMENSION + V] = 1.1f;
+            VERTEX_DATA[3 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[4 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[0 * DIMENSION + V] = 0.55f;
         }
 
 
-        VERTEX_DATA[0 * 4 + Y] = d;
-        VERTEX_DATA[1 * 4 + Y] = bound;
-        VERTEX_DATA[2 * 4 + Y] = bound;
-        VERTEX_DATA[3 * 4 + Y] = upper;
-        VERTEX_DATA[4 * 4 + Y] = upper;
-        VERTEX_DATA[5 * 4 + Y] = bound;
+        VERTEX_DATA[0 * DIMENSION + Y] = d;
+        VERTEX_DATA[1 * DIMENSION + Y] = bound;
+        VERTEX_DATA[2 * DIMENSION + Y] = bound;
+        VERTEX_DATA[3 * DIMENSION + Y] = upper;
+        VERTEX_DATA[4 * DIMENSION + Y] = upper;
+        VERTEX_DATA[5 * DIMENSION + Y] = bound;
 
-        VERTEX_DATA[2 * 4 + X] = rightBound - 0.05f;
-        VERTEX_DATA[3 * 4 + X] = rightBound - 0.05f;
-        VERTEX_DATA[0 * 4 + X] = (VERTEX_DATA[2 * 4 + X] + VERTEX_DATA[1 * 4 + X])/2f;
+        VERTEX_DATA[2 * DIMENSION + X] = rightBound - 0.05f;
+        VERTEX_DATA[3 * DIMENSION + X] = rightBound - 0.05f;
+        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[2 * DIMENSION + X] + VERTEX_DATA[1 * DIMENSION + X])/2f;
 
         Log.d(TAG, "init: text size = " + size + " height=" + ((int)size + FONT_PADDING + FONT_PADDING ) * line);
         vertexArray = new VertexArray(VERTEX_DATA);
@@ -147,9 +133,9 @@ public class EventDescription extends EventText {
 //        mTextView = new GLTextView(context, R.raw.robot, vertexArray, matrix);
     }
 
-    public float getCenterVerticeYPoint(){return VERTEX_DATA[0 * 4 + 1];}
-    public float getTopVerticeYPoint(){return VERTEX_DATA[3 * 4 + 1];}
-    public float getBottomVerticeYPoint(){return VERTEX_DATA[1 * 4 + 1];}
+    public float getCenterVerticeYPoint(){return VERTEX_DATA[0 * DIMENSION + 1];}
+    public float getTopVerticeYPoint(){return VERTEX_DATA[3 * DIMENSION + 1];}
+    public float getBottomVerticeYPoint(){return VERTEX_DATA[1 * DIMENSION + 1];}
 
     public void bindData() {
         mTextView.bindData();

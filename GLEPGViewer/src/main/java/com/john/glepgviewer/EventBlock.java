@@ -70,12 +70,12 @@ public class EventBlock extends EventComponent{
         float[] vertexData = {
                 // Order of coordinates: X, Y, R, G, B
                 // Triangle Fan: Entire block
-                0f, -0.75f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
-                -0.5f, -1.0f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
-                0.5f, -1.0f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
-                0.5f, 0.5f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
-                -0.5f, 0.5f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
-                -0.5f, -1.0f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
+                0.5f, -1.25f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
+                0.0f, -1.5f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
+                1.0f, -1.5f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
+                1.0f, 0.0f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
+                0.0f, 0.0f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
+                0.0f, -1.5f, backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue,
 
                 // Border left
                 -0.5f, 0.5f, leftBorderColor.Red, leftBorderColor.Green, leftBorderColor.Blue,
@@ -102,6 +102,8 @@ public class EventBlock extends EventComponent{
 //    public EventBlock(){
 //        super();
 //    }
+
+    private float mWidth;
     public EventBlock(Context context, int merge, float height, float[] matrix){
 //        super();
         mContext = context;
@@ -109,12 +111,17 @@ public class EventBlock extends EventComponent{
         mHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 height,
                 mContext.getResources().getDisplayMetrics());
+        mWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                145f,
+                mContext.getResources().getDisplayMetrics());
+
 //        Log.d(TAG, "ctor: " + mMerge + " " + mHeight);
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
 
-        float h = mHeight/TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                180f,
-                mContext.getResources().getDisplayMetrics());
+//        float h = mHeight/TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+//                180f,
+//                mContext.getResources().getDisplayMetrics());
+        float h = mHeight * projectionMatrix[Y * 4 + Y];
 
         VERTEX_DATA[0 * DIMENSION + Y] = (-h/2f + 0.5f);
         VERTEX_DATA[1 * DIMENSION + Y] = -h + 0.5f;
@@ -125,13 +132,31 @@ public class EventBlock extends EventComponent{
         VERTEX_DATA[12 * DIMENSION + Y] = -h + 0.5f;
         VERTEX_DATA[13 * DIMENSION + Y] = -h + 0.5f;
 
-        float w = VERTEX_DATA[2 * DIMENSION + X] - VERTEX_DATA[1 * DIMENSION + X];
-        VERTEX_DATA[2 * DIMENSION + X] += (mMerge * w);
-        VERTEX_DATA[3 * DIMENSION + X] += (mMerge * w);
-        VERTEX_DATA[9 * DIMENSION + X] += (mMerge * w);
-        VERTEX_DATA[10 * DIMENSION + X] += (mMerge * w);
-        VERTEX_DATA[11 * DIMENSION + X] += (mMerge * w);
-        VERTEX_DATA[12 * DIMENSION + X] += (mMerge * w);
+//        VERTEX_DATA[0 * DIMENSION + Y] = -h/2f;
+//        VERTEX_DATA[1 * DIMENSION + Y] = -h;
+//        VERTEX_DATA[2 * DIMENSION + Y] = -h;
+//        VERTEX_DATA[5 * DIMENSION + Y] = -h;
+//        VERTEX_DATA[7 * DIMENSION + Y] = -h;
+//        VERTEX_DATA[11 * DIMENSION + Y] = -h;
+//        VERTEX_DATA[12 * DIMENSION + Y] = -h;
+//        VERTEX_DATA[13 * DIMENSION + Y] = -h;
+
+//        float w = VERTEX_DATA[2 * DIMENSION + X] - VERTEX_DATA[1 * DIMENSION + X];
+        float w = mWidth * projectionMatrix[X * 4 + X];
+
+//        VERTEX_DATA[2 * DIMENSION + X] += (mMerge * w);
+//        VERTEX_DATA[3 * DIMENSION + X] += (mMerge * w);
+//        VERTEX_DATA[9 * DIMENSION + X] += (mMerge * w);
+//        VERTEX_DATA[10 * DIMENSION + X] += (mMerge * w);
+//        VERTEX_DATA[11 * DIMENSION + X] += (mMerge * w);
+//        VERTEX_DATA[12 * DIMENSION + X] += (mMerge * w);
+
+        VERTEX_DATA[2 * DIMENSION + X] = (mMerge * w);
+        VERTEX_DATA[3 * DIMENSION + X] = (mMerge * w);
+        VERTEX_DATA[9 * DIMENSION + X] = (mMerge * w);
+        VERTEX_DATA[10 * DIMENSION + X] = (mMerge * w);
+        VERTEX_DATA[11 * DIMENSION + X] = (mMerge * w);
+        VERTEX_DATA[12 * DIMENSION + X] = (mMerge * w);
         VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[2 * DIMENSION + X] - VERTEX_DATA[1 * DIMENSION + X])/2f;
 
         if(mHeight <= 15f){

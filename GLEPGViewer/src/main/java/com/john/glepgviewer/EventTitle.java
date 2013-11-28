@@ -66,7 +66,7 @@ public class EventTitle extends EventText {
 
         //Pre-load number of lines
         int line = GLTextView.StringFormat(title, (int)(width), (int)(textSize)).length;
-        float h = VERTEX_DATA[0 * 4 + Y] - VERTEX_DATA[1 * 4 + Y];
+        float h = VERTEX_DATA[0 * DIMENSION + Y] - VERTEX_DATA[1 * DIMENSION + Y];
         float bound = upper - (h * 2f * line);
         float d = (upper + bound)/2f;
         int frontColor = Color.parseColor(BIG_TEXT_COLOR);
@@ -85,10 +85,10 @@ public class EventTitle extends EventText {
             Log.d(TAG, "init: Case1");
             bound = upper;
             d = upper;
-            VERTEX_DATA[0 * 4 + V] = 0.0f;
-            VERTEX_DATA[1 * 4 + V] = 0.0f;
-            VERTEX_DATA[2 * 4 + V] = 0.0f;
-            VERTEX_DATA[5 * 4 + V] = 0.0f;
+            VERTEX_DATA[0 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[1 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[2 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[5 * DIMENSION + V] = 0.0f;
         }
         else if( bound <= lower){
             Log.d(TAG, "init: Case2");
@@ -96,10 +96,10 @@ public class EventTitle extends EventText {
 //            r += (r/10f);
             bound = lower;
             d = (upper + bound)/2f;
-            VERTEX_DATA[0 * 4 + V] = r/2f;
-            VERTEX_DATA[1 * 4 + V] = r;
-            VERTEX_DATA[2 * 4 + V] = r;
-            VERTEX_DATA[5 * 4 + V] = r;
+            VERTEX_DATA[0 * DIMENSION + V] = r/2f;
+            VERTEX_DATA[1 * DIMENSION + V] = r;
+            VERTEX_DATA[2 * DIMENSION + V] = r;
+            VERTEX_DATA[5 * DIMENSION + V] = r;
 
 //            Log.d(TAG, "init: r=" + r);
 //            Log.d(TAG, "init: upper-" + VERTEX_DATA[3 * 4 + 1] + " center-" + VERTEX_DATA[0 * 4 + 1] + " lower-" + VERTEX_DATA[1 * 4 + 1]);
@@ -111,23 +111,23 @@ public class EventTitle extends EventText {
 //            bound -= (0.04f * w);
 
             d = (upper + bound)/2f;
-            VERTEX_DATA[1 * 4 + V] = 1.0f;
-            VERTEX_DATA[2 * 4 + V] = 1.0f;
-            VERTEX_DATA[5 * 4 + V] = 1.0f;
-            VERTEX_DATA[3 * 4 + V] = 0.0f;
-            VERTEX_DATA[4 * 4 + V] = 0.0f;
-            VERTEX_DATA[0 * 4 + V] = 0.5f;
+            VERTEX_DATA[1 * DIMENSION + V] = 1.0f;
+            VERTEX_DATA[2 * DIMENSION + V] = 1.0f;
+            VERTEX_DATA[5 * DIMENSION + V] = 1.0f;
+            VERTEX_DATA[3 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[4 * DIMENSION + V] = 0.0f;
+            VERTEX_DATA[0 * DIMENSION + V] = 0.5f;
         }
-        VERTEX_DATA[0 * 4 + Y] = d;
-        VERTEX_DATA[1 * 4 + Y] = bound;
-        VERTEX_DATA[2 * 4 + Y] = bound;
-        VERTEX_DATA[3 * 4 + Y] = upper;
-        VERTEX_DATA[4 * 4 + Y] = upper;
-        VERTEX_DATA[5 * 4 + Y] = bound;
+        VERTEX_DATA[0 * DIMENSION + Y] = d;
+        VERTEX_DATA[1 * DIMENSION + Y] = bound;
+        VERTEX_DATA[2 * DIMENSION + Y] = bound;
+        VERTEX_DATA[3 * DIMENSION + Y] = upper;
+        VERTEX_DATA[4 * DIMENSION + Y] = upper;
+        VERTEX_DATA[5 * DIMENSION + Y] = bound;
 
-        VERTEX_DATA[2 * 4 + X] = rightBound - 0.05f;
-        VERTEX_DATA[3 * 4 + X] = rightBound - 0.05f;
-        VERTEX_DATA[0 * 4 + X] = (VERTEX_DATA[2 * 4 + X] + VERTEX_DATA[1 * 4 + X])/2f;
+        VERTEX_DATA[2 * DIMENSION + X] = rightBound - 0.05f;
+        VERTEX_DATA[3 * DIMENSION + X] = rightBound - 0.05f;
+        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[2 * DIMENSION + X] + VERTEX_DATA[1 * DIMENSION + X])/2f;
 
         Log.d(TAG, "init: text size = " + textSize + " height=" + ((int)textSize + FONT_PADDING + FONT_PADDING ) * line);
         vertexArray = new VertexArray(VERTEX_DATA);
@@ -143,9 +143,9 @@ public class EventTitle extends EventText {
         mTextView = new GLTextView(context, R.raw.robot, vertexArray, matrix);
     }
 
-    public float getCenterVerticeYPoint(){return VERTEX_DATA[0 * 4 + Y];}
-    public float getTopVerticeYPoint(){return VERTEX_DATA[3 * 4 + Y];}
-    public float getBottomVerticeYPoint(){return VERTEX_DATA[1 * 4 + Y];}
+    public float getCenterVerticeYPoint(){return VERTEX_DATA[0 * DIMENSION + Y];}
+    public float getTopVerticeYPoint(){return VERTEX_DATA[3 * DIMENSION + Y];}
+    public float getBottomVerticeYPoint(){return VERTEX_DATA[1 * DIMENSION + Y];}
 
     public void bindData() {
         mTextView.bindData();
