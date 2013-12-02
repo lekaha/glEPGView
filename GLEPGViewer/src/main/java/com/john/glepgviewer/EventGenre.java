@@ -17,10 +17,11 @@ public class EventGenre extends EventComponent{
 
     protected final static int POSITION_COMPONENT_COUNT = 2;
     protected final static int TEXTURE_COMPONENT_COUNT = 2;
-    protected final static int V = 2;
     protected final static float GENRE_MARGIN_TOP = LAYOUT_PADDING_TOP + 2f;
+    protected final static float GENRE_MARGIN_RIGHT = 4f;
     protected final static float GENRE_WIDTH = 18f;
     protected final static float GENRE_HEIGHT = 18f;
+    protected final static int V = 3;
 
     protected GLImageView mTextView;
     protected VertexArray vertexArray;
@@ -31,13 +32,14 @@ public class EventGenre extends EventComponent{
         STRIDE = DIMENSION * Constants.BYTES_PER_FLOAT;
 
         float[] vertexData = {
+            // Order of coordinates: X, Y, U, V
             // Triangle Fan: Time minute text block
-            GENRE_WIDTH/2f, -(GENRE_MARGIN_TOP + GENRE_MARGIN_TOP + GENRE_HEIGHT)/2f, 0.5f, 0.5f,
-            0f, -(GENRE_MARGIN_TOP + GENRE_HEIGHT), 0.0f, 1.0f,
-            GENRE_WIDTH, -(GENRE_MARGIN_TOP + GENRE_HEIGHT), 1.0f, 1.0f,
-            GENRE_WIDTH, -GENRE_MARGIN_TOP, 1.0f, 0.0f,
-            0f, -GENRE_MARGIN_TOP, 0.0f, 0.0f,
-            0f, -(GENRE_MARGIN_TOP + GENRE_HEIGHT), 0.0f, 1.0f
+            GENRE_WIDTH/2f  , -(GENRE_MARGIN_TOP + GENRE_HEIGHT)/2f  , 0.5f, 0.5f,
+            0f              , -(GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 0.0f, 1.0f,
+            GENRE_WIDTH     , -(GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 1.0f, 1.0f,
+            GENRE_WIDTH     , -GENRE_MARGIN_TOP                                         , 1.0f, 0.0f,
+            0f              , -GENRE_MARGIN_TOP                                         , 0.0f, 0.0f,
+            0f              , -(GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 0.0f, 1.0f
         };
         VERTEX_DATA = vertexData;
     }
@@ -52,51 +54,49 @@ public class EventGenre extends EventComponent{
     }
 
     public EventGenre(Context context, int resId, float left, float right, float upper, float lower, float[] matrix){
-
+        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
         float width  = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 GENRE_WIDTH,
                 context.getResources().getDisplayMetrics());
-
         float height  = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 GENRE_HEIGHT,
                 context.getResources().getDisplayMetrics());
+        float paddingBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                LAYOUT_PADDING_BOTTOM,
+                context.getResources().getDisplayMetrics());
+        float l = lower + paddingBottom;
 
-
-        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
-
-        for(int i = 0; i<6; i++){
+        for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
             VERTEX_DATA[i * DIMENSION + X] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    VERTEX_DATA[i * DIMENSION + X] + 4,
+                    VERTEX_DATA[i * DIMENSION + X] + GENRE_MARGIN_RIGHT,
                     context.getResources().getDisplayMetrics()) + left;
             VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     VERTEX_DATA[i * DIMENSION + Y],
                     context.getResources().getDisplayMetrics());
-
         }
 
-        float l = lower + 0.05f;
         if(getTopVerticeYPoint() < l){
-            for(int i = 0; i<6; i++){
+            for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
                 VERTEX_DATA[i * DIMENSION + X] = 0f;
                 VERTEX_DATA[i * DIMENSION + Y] = 0f;
             }
         }
         else if(getBottomVerticeYPoint() < l){
-            float r = (VERTEX_DATA[3 * DIMENSION + Y] - l)/(VERTEX_DATA[3 * DIMENSION + Y] - VERTEX_DATA[1 * DIMENSION + Y]);
-            float d = r * 1.0f;
-//            VERTEX_DATA[0 * DIMENSION + Y] = (l + VERTEX_DATA[3 * DIMENSION + Y])/2f;
-//            VERTEX_DATA[1 * DIMENSION + Y] = l;
-//            VERTEX_DATA[2 * DIMENSION + Y] = l;
-//            VERTEX_DATA[5 * DIMENSION + Y] = l;
-//
-//            VERTEX_DATA[0 * DIMENSION + V] = d/2f;
-//            VERTEX_DATA[1 * DIMENSION + V] = d;
-//            VERTEX_DATA[2 * DIMENSION + V] = d;
-//            VERTEX_DATA[5 * DIMENSION + V] = d;
+            Log.d(TAG, "init: Case2");
+            float r = Math.abs(VERTEX_DATA[3 * DIMENSION + Y] - l)/Math.abs(height);
+            VERTEX_DATA[1 * DIMENSION + V] = r;
+            VERTEX_DATA[2 * DIMENSION + V] = r;
+            VERTEX_DATA[5 * DIMENSION + V] = r;
+            VERTEX_DATA[0 * DIMENSION + V] = (VERTEX_DATA[2 * DIMENSION + V] + VERTEX_DATA[3 * DIMENSION + V])/2f;
+
+            VERTEX_DATA[1 * DIMENSION + Y] = l;
+            VERTEX_DATA[2 * DIMENSION + Y] = l;
+            VERTEX_DATA[5 * DIMENSION + Y] = l;
+            VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
         }
 
         vertexArray = new VertexArray(VERTEX_DATA);
-        mTextView = new GLImageView(context, resId, (int)width, (int)height, 0, 0, vertexArray, matrix);
+        mTextView = new GLImageView(context, resId, false, (int)width, (int)height, 0, 0, vertexArray, matrix);
     }
 
     public void setMarginLeft(float marginLeft){

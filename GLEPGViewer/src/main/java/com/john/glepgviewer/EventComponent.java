@@ -18,6 +18,8 @@ public abstract class EventComponent {
     protected final static float LAYOUT_PADDING_RIGHT = 9f;
     protected final static float LAYOUT_PADDING_BOTTOM = 9f;
 
+    protected final static float MIN_EVENT_HEIGHT = 15f;
+
     /* Need to initialize */
     protected int DIMENSION;
     protected int STRIDE;

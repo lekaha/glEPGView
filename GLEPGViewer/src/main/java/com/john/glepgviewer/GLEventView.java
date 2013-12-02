@@ -33,7 +33,7 @@ public class GLEventView {
             float[] projectionMatrix){
         merge = 1;
         mEventBlock = new EventBlock(mContext,
-                merge, 220f,
+                merge, 200f,
                 projectionMatrix);
         EventComponent.EventRec blockRec = mEventBlock.new EventRec();
 

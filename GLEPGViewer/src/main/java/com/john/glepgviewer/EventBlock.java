@@ -110,6 +110,9 @@ public class EventBlock extends EventComponent{
         mWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 145f,
                 mContext.getResources().getDisplayMetrics());
+        float minHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                MIN_EVENT_HEIGHT,
+                mContext.getResources().getDisplayMetrics());
 
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
         float h = -mHeight;// * projectionMatrix[Y * 4 + Y];
@@ -133,7 +136,7 @@ public class EventBlock extends EventComponent{
         VERTEX_DATA[12 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (mMerge * w);
         VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[2 * DIMENSION + X] + VERTEX_DATA[1 * DIMENSION + X])/2f;
 
-        if(mHeight <= 15f){
+        if(mHeight <= minHeight){
             for(int i = 0; i<6; i++){
                 VERTEX_DATA[i * DIMENSION + R] = miniBackgroundColro.Red;
                 VERTEX_DATA[i * DIMENSION + G] = miniBackgroundColro.Green;

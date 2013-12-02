@@ -28,8 +28,8 @@ public class EventRecord extends EventComponent{
     protected final static int POSITION_COMPONENT_COUNT = 2;
     protected final static int TEXTURE_COMPONENT_COUNT = 2;
 
-    private final static float WIDTH = 35f;
-    private final static float HEIGHT = 35f;
+    private final static float WIDTH = 32f;
+    private final static float HEIGHT = 32f;
 
     protected GLImageView mTextView;
     protected VertexArray vertexArray;
@@ -78,6 +78,15 @@ public class EventRecord extends EventComponent{
                 float[] projectionMatrix){
         float[] matrix = new float[16];
         System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
+        float width  = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                WIDTH,
+                context.getResources().getDisplayMetrics());
+        float height  = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                HEIGHT,
+                context.getResources().getDisplayMetrics());
+        width = WIDTH;
+        height = HEIGHT;
+
         Log.d(TAG, "init: " + getBottomVerticeYPoint() + " vs " + lowerBound + " vs " + rightBound);
         isClipping = false;
 
@@ -105,7 +114,7 @@ public class EventRecord extends EventComponent{
 
 
         vertexArray = new VertexArray(VERTEX_DATA);
-        mTextView = new GLImageView(context, resId, 30, 30, 0, 0, vertexArray, matrix);
+        mTextView = new GLImageView(context, resId, false, (int)width, (int)height, 0, 0, vertexArray, matrix);
     }
 
     @Override

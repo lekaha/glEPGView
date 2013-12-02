@@ -20,6 +20,7 @@ import static android.opengl.GLUtils.texImage2D;
  */
 public class TextureHelper {
     private static final String TAG = "TextureHelper";
+    private static boolean isRepeatMode = false;
 
     /**
      * Loads a texture from a resource ID, returning the OpenGL ID for that
@@ -29,23 +30,19 @@ public class TextureHelper {
      * @param resourceId
      * @return
      */
-    public static int loadTexture(Context context, int resourceId) {
-//        final int[] textureObjectIds = new int[1];
-//        glGenTextures(1, textureObjectIds, 0);
-//
-//        if (textureObjectIds[0] == 0) {
-//            if (LoggerConfig.ON) {
-//                Log.w(TAG, "Could not generate a new OpenGL texture object.");
-//            }
-//            return 0;
-//        }
-
+    public static int loadTexture(Context context, int resourceId, boolean isGrayMode) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
 
         // Read in the resource
         final Bitmap bitmap = BitmapFactory.decodeResource(
                 context.getResources(), resourceId, options);
+
+        //Check it, is that power of two.
+        if(bitmap.getWidth() == bitmap.getHeight()){
+            if(0 == (bitmap.getWidth() & (bitmap.getWidth() - 1)))
+                isRepeatMode = true;
+        }
         int textureObjectId = loadTexture(bitmap);
 
         // Recycle the bitmap, since its data has been loaded into
@@ -90,9 +87,14 @@ public class TextureHelper {
         // black.
         glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-        glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-        glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-
+        if(isRepeatMode){
+            glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+            glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+        }
+        else{
+            glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        }
 
         // Load the bitmap into the bound texture.
         texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);

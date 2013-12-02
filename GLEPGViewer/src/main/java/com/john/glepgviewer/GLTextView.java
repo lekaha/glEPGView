@@ -147,19 +147,7 @@ public class GLTextView {
                       int originSize, int originWidth, int originHeight,
                       int paddingLeft, int paddingTop,
                       float letterSpacing, float lineSpacing){
-//        fontScaleX = (projectionMatrix[0] != 0f)? 1.0f/projectionMatrix[0]: 1f;
-//        fontScaleY = (projectionMatrix[5] != 0f)? 1.0f/projectionMatrix[5]: 1f;
         charWidthMax = 0;
-
-//        for(int i = 0; i<4; i++){
-//            String str = "";
-//            for(int j = 0; j<4; j++)
-//                str += (projectionMatrix[i*4+j] + " ");
-//            Log.d(TAG, "init: " + str);
-//        }
-
-//        int width  = (int)((float)originWidth * fontScaleX);
-//        int height  = (int)((float)originHeight * (fontScaleY - 0.12f ));
 
         int width  = originWidth;
         int height  = originHeight;
@@ -179,11 +167,9 @@ public class GLTextView {
         paint.setFilterBitmap(true);
         paint.setAntiAlias(true);                     // Enable Anti Alias
         paint.setTextSize(size);                      // Set Text Size
-        paint.setSubpixelText(true);
+//        paint.setSubpixelText(true);
         paint.setColor( fontColor);                     // Set ARGB (White, Opaque)
-//        paint.setTextScaleX(fontScaleX + 0.1f);
         paint.setTypeface( typeface );
-
 
         // get font metrics
         Paint.FontMetrics fm = paint.getFontMetrics();  // Get Font Metrics
@@ -225,7 +211,7 @@ public class GLTextView {
     private void init(Context context, int resId){
         mTextureShaderProgram = new TextureShaderProgram(vertexShaderCode, fragmentShaderCode);
 //        mTexture = TextureHelper.loadTexture(bitmap);
-        mTexture = TextureHelper.loadTexture(context, resId);
+        mTexture = TextureHelper.loadTexture(context, resId, false);
     }
 
     public void begin(){

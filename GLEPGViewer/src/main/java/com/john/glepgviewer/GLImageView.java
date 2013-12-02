@@ -62,6 +62,7 @@ public class GLImageView {
     private TextureShaderProgram mTextureShaderProgram;
     private final float[] projectionMatrix = new float[16];
 //    private final float[] modelMatrix = new float[16];
+    private boolean isGrayMode;
 
     private static final int POSITION_COMPONENT_COUNT = 2;
     private static final int TEXTURE_COORDINATES_COMPONENT_COUNT = 2;
@@ -75,10 +76,12 @@ public class GLImageView {
         vertexArray = vertices;
     }
 
-    public GLImageView(Context context, int resId, int width, int height, int paddingLeft, int paddingRight, VertexArray vertices, float[] matrix){
+    public GLImageView(Context context, int resId, boolean isGray, int width, int height, int paddingLeft, int paddingRight, VertexArray vertices, float[] matrix){
+        isGrayMode = isGray;
         init(context, resId);
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
         vertexArray = vertices;
+
     }
 
     private void init(Bitmap bitmap){
@@ -90,7 +93,7 @@ public class GLImageView {
     private void init(Context context, int resId){
         mTextureShaderProgram = new TextureShaderProgram(vertexShaderCode, fragmentShaderCode);
 //        mTexture = TextureHelper.loadTexture(bitmap);
-        mTexture = TextureHelper.loadTexture(context, resId);
+        mTexture = TextureHelper.loadTexture(context, resId, isGrayMode);
     }
 
     public void begin(){
