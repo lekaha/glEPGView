@@ -37,27 +37,28 @@ public class EventTitle extends EventText {
     }
 
     public EventTitle(Context context, String title, Typeface typeface,
-                      float textSize, float width, float height,
+                      int merge,
                       float upperBound, float lowerBound, float rightBound,
                       float[] matrix){
         mContext = context;
-        textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                textSize,
-                mContext.getResources().getDisplayMetrics());
-        width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                width,
-                mContext.getResources().getDisplayMetrics());
+        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                            TITLE_SIZE,
+                            mContext.getResources().getDisplayMetrics());
+        float width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    WIDTH * merge - LAYOUT_PADDING_RIGHT - LAYOUT_PADDING_LEFT,
+                    mContext.getResources().getDisplayMetrics());
 
         float lineSpacing = FONT_PADDING;
 
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
+
         float upper = upperBound + 0.00f;
         float lower = lowerBound + 0.05f;
 
         //Pre-load number of lines
         int line = GLTextView.StringFormat(title, (int)(width), (int)(textSize)).length;
-        float h = VERTEX_DATA[0 * DIMENSION + Y] - VERTEX_DATA[1 * DIMENSION + Y];
-        float bound = upper - (h * 2f * line);
+        float h = Math.abs((VERTEX_DATA[3 * DIMENSION + Y] - VERTEX_DATA[2 * DIMENSION + Y])) * line;
+        float bound = upper - h;
         float d = (upper + bound)/2f;
         int frontColor = Color.parseColor(BIG_TEXT_COLOR);
         int backColor = Color.parseColor(BG_COLOR);
@@ -79,7 +80,7 @@ public class EventTitle extends EventText {
             VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     VERTEX_DATA[i * DIMENSION + Y] * line,
                     mContext.getResources().getDisplayMetrics())
-                    + upperBound
+                    + upper
                     + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     -LAYOUT_PADDING_TOP,
                     mContext.getResources().getDisplayMetrics());
@@ -131,10 +132,12 @@ public class EventTitle extends EventText {
         Log.d(TAG, "init: text size = " + textSize + " height=" + ((int)textSize + lineSpacing) * line);
         vertexArray = new VertexArray(VERTEX_DATA);
 //        backColor = Color.parseColor("#ff268626");
-        float dy = mContext.getResources().getDisplayMetrics().density + 0.8f;
+        float dy = mContext.getResources().getDisplayMetrics().density + 0.8f;  // Text's density weight
         mTextView = new GLTextView(title, typeface,
-                (int)((textSize) * dy), (int)(width * dy), (int)(((textSize + lineSpacing) * dy) * line),
-                0, -3,                  //padding left and padding top
+                (int)(textSize * dy),   //Text's size
+                (int)(width * dy),  //Text's area width
+                (int)(((textSize + lineSpacing) * dy) * line),  //Text's area height
+                0, -3,  //padding left and padding top
                 0f, lineSpacing * dy,   //letter spacing and line spacing
                 frontColor, backColor,
                 vertexArray, projectionMatrix);

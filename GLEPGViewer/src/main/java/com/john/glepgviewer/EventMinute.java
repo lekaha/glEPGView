@@ -10,32 +10,10 @@ import android.util.TypedValue;
  * Created by john on 10/28/13.
  */
 public class EventMinute extends EventText{
-//    private static final String TAG = "EventMinute";
-
-//    protected ColorConverter.GLColor backgroundColor = ColorConverter.toGLColor("#1A1A1A");
-//    protected ColorConverter.GLColor fontColor = ColorConverter.toGLColor("#FFFFFF");
-
-//    protected float[] VERTEX_DATA = {
-//            // Triangle Fan: Time minute text block
-//            -0.3788f, 0.4095f, 0.25f, 0.45f,
-//            -0.45f, 0.3567f, 0.0f, 0.9f,
-//            -0.3076f, 0.3567f, 0.5f, 0.9f,
-//            -0.3076f, 0.4622f, 0.5f, 0.0f,
-//            -0.45f, 0.4622f, 0.0f, 0.0f,
-//            -0.45f, 0.3567f, 0.0f, 0.9f
-//    };
-
-//    private static final int FONT_SIZE = 16;
-//    private static final int FONT_PADDING = 2;
-//    private static final float WIDTH = 35f;
-
-//    protected GLTextView mTextView;
-//    protected VertexArray vertexArray;
-
-    private static final float TIME_WIDTH = 19f;
-    private static final float TIME_HEIGHT = 18f;
-    private static final float TIME_TEXT_SIZE = 16f;
-    private static final float TIME_TEXT_LINESPACING = 1f;
+    private static final float TIME_SIZE = 16f;
+    //    private static final float TITLE_WIDTH = 19f;
+    private static final float TIME_HEIGHT = TIME_SIZE + FONT_PADDING;
+    private static final float WIDTH = 19f;
 
     protected float mWidth;
     protected float mHeight;
@@ -52,10 +30,10 @@ public class EventMinute extends EventText{
 //                -0.45f,   0.4622f, 0.0f,  0.0f,
 //                -0.45f,   0.3567f, 0.0f,  1.0f
 
-                LAYOUT_PADDING_LEFT + TIME_WIDTH / 2f   , -(LAYOUT_PADDING_TOP + TIME_HEIGHT / 2f)  , 0.5f  , 0.5f,
+                LAYOUT_PADDING_LEFT + WIDTH / 2f   , -(LAYOUT_PADDING_TOP + TIME_HEIGHT / 2f)  , 0.5f  , 0.5f,
                 LAYOUT_PADDING_LEFT                     , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 0.0f  , 1.0f,
-                LAYOUT_PADDING_LEFT + TIME_WIDTH        , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 1.0f  , 1.0f,
-                LAYOUT_PADDING_LEFT + TIME_WIDTH        , -(LAYOUT_PADDING_TOP)                     , 1.0f  , 0.0f,
+                LAYOUT_PADDING_LEFT + WIDTH        , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 1.0f  , 1.0f,
+                LAYOUT_PADDING_LEFT + WIDTH        , -(LAYOUT_PADDING_TOP)                     , 1.0f  , 0.0f,
                 LAYOUT_PADDING_LEFT                     , -(LAYOUT_PADDING_TOP)                     , 0.0f  , 0.0f,
                 LAYOUT_PADDING_LEFT                     , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 0.0f  , 1.0f
         };
@@ -71,20 +49,19 @@ public class EventMinute extends EventText{
     }
 
     public EventMinute(Context context, String minute, Typeface typeface,
-                       float textSize, float width, float height, float upper, float lower,
-                       float[] projectionMatrix){
+                       float upper, float lower,
+                       float[] matrix){
         mContext = context;
-        float[] matrix = new float[16];
-        System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
-        textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-            textSize,
-            mContext.getResources().getDisplayMetrics());
-        mWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-            width,
-            mContext.getResources().getDisplayMetrics());
-        mHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-            height,
-            mContext.getResources().getDisplayMetrics());
+        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
+        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                            TIME_SIZE,
+                            mContext.getResources().getDisplayMetrics());
+        float mWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        WIDTH,
+                        mContext.getResources().getDisplayMetrics());
+        float mHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                            TIME_HEIGHT,
+                            mContext.getResources().getDisplayMetrics());
 
 
         int frontColor = Color.parseColor(BIG_TEXT_COLOR);

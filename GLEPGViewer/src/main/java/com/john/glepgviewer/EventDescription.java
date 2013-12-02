@@ -11,8 +11,9 @@ import android.util.TypedValue;
  */
 public class EventDescription extends EventText {
 
-    private static final float DESCRIPTION_WIDTH = 19f;
-    private static final float DESCRIPTION_HEIGHT = 16f;
+    private static final float DESCRIPTION_SIZE = 14f;
+//    private static final float DESCRIPTION_WIDTH = 19f;
+    private static final float DESCRIPTION_HEIGHT = DESCRIPTION_SIZE + FONT_PADDING;
 
     private static final float WIDTH = 145f;
 
@@ -45,22 +46,23 @@ public class EventDescription extends EventText {
     }
 
     public EventDescription(Context context, String title, Typeface typeface,
-                            float textSize, float width, float height,
+                            int merge,
                             float upperBound, float lowerBound, float rightBound,
                             float[] matrix){
         mContext = context;
-        textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-            textSize,
-            mContext.getResources().getDisplayMetrics());
-        width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                width,
-                mContext.getResources().getDisplayMetrics());
+        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    DESCRIPTION_SIZE,
+                    mContext.getResources().getDisplayMetrics());
+        float width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        WIDTH * merge - LAYOUT_PADDING_RIGHT - LAYOUT_PADDING_LEFT,
+                        mContext.getResources().getDisplayMetrics());
+        float lineSpacing = FONT_PADDING;
 
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
 
         float upper = upperBound + 0.00f;
         float lower = lowerBound + 0.05f;
-        float size = Math.round(textSize);
+        float size = textSize;
 
         //Pre-load number of lines
         int line = GLTextView.StringFormat(title, (int)(width), (int)(size)).length;
@@ -81,15 +83,15 @@ public class EventDescription extends EventText {
 
         for(int i = 0; i<6; i++){
             VERTEX_DATA[i * DIMENSION + X] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    VERTEX_DATA[i * DIMENSION + X],
-                    mContext.getResources().getDisplayMetrics());
+                                                VERTEX_DATA[i * DIMENSION + X],
+                                                mContext.getResources().getDisplayMetrics());
             VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    VERTEX_DATA[i * DIMENSION + Y] * line,
-                    mContext.getResources().getDisplayMetrics())
-                    + upperBound
-                    + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    -LAYOUT_PADDING_TOP,
-                    mContext.getResources().getDisplayMetrics());
+                                                VERTEX_DATA[i * DIMENSION + Y] * line,
+                                                mContext.getResources().getDisplayMetrics())
+                                             + upperBound
+                                             + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                                                -LAYOUT_PADDING_TOP,
+                                                mContext.getResources().getDisplayMetrics());
 
         }
 
@@ -132,27 +134,18 @@ public class EventDescription extends EventText {
 //            VERTEX_DATA[0 * DIMENSION + V] = 0.55f;
         }
 
-
-//        VERTEX_DATA[0 * DIMENSION + Y] = d;
-//        VERTEX_DATA[1 * DIMENSION + Y] = bound;
-//        VERTEX_DATA[2 * DIMENSION + Y] = bound;
-//        VERTEX_DATA[3 * DIMENSION + Y] = upper;
-//        VERTEX_DATA[4 * DIMENSION + Y] = upper;
-//        VERTEX_DATA[5 * DIMENSION + Y] = bound;
-//
-//        VERTEX_DATA[2 * DIMENSION + X] = rightBound - 0.05f;
-//        VERTEX_DATA[3 * DIMENSION + X] = rightBound - 0.05f;
-//        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[2 * DIMENSION + X] + VERTEX_DATA[1 * DIMENSION + X])/2f;
-
-        Log.d(TAG, "init: text size = " + size + " height=" + ((int)size + FONT_PADDING + FONT_PADDING ) * line);
+        Log.d(TAG, "init: text size = " + size + " height=" + ((int)size + lineSpacing ) * line);
         vertexArray = new VertexArray(VERTEX_DATA);
-//        backColor = Color.parseColor("#ff268626");
-        float dy = mContext.getResources().getDisplayMetrics().density + 0.8f;
+//        backColor = Color.parseColor("#ff265626");
+        float dy = mContext.getResources().getDisplayMetrics().density + 0.8f;  // Text's density weight
         mTextView = new GLTextView(title, typeface,
-            (int)((textSize) * dy), (int)(width * dy), (int)((textSize * line) * dy),
-            0, -3,
-            0f, 0f,
-            frontColor, backColor, vertexArray, projectionMatrix);
+            (int)(textSize * dy),   //Text's size
+            (int)(width * dy),  //Text's area width
+            (int)((textSize + lineSpacing) * dy) * line,    //Text's area height
+            0, -3,  //padding left and padding top
+            0f, lineSpacing * dy,   //letter spacing and line spacing
+            frontColor, backColor,
+            vertexArray, projectionMatrix);
     }
 
     public EventDescription(Context context, Typeface typeface, float[] projectionMatrix){
