@@ -3,6 +3,7 @@ package com.john.glepgviewer;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
+import android.util.TypedValue;
 
 /**
  * Created by john on 11/6/13.
@@ -27,6 +28,9 @@ public class EventRecord extends EventComponent{
     protected final static int POSITION_COMPONENT_COUNT = 2;
     protected final static int TEXTURE_COMPONENT_COUNT = 2;
 
+    private final static float WIDTH = 35f;
+    private final static float HEIGHT = 35f;
+
     protected GLImageView mTextView;
     protected VertexArray vertexArray;
     protected boolean isClipping = false;
@@ -38,9 +42,9 @@ public class EventRecord extends EventComponent{
 
         float[] vertexData = {
             // Triangle
-            0.50f, 0.30f, 1.0f, 1.0f,
-            0.50f, 0.50f, 1.0f, 0.0f,
-            0.2517f, 0.50f, 0.0f, 0.0f,
+            0, -HEIGHT, 1.0f, 1.0f,
+            0, 0, 1.0f, 0.0f,
+            -WIDTH, 0, 0.0f, 0.0f,
 
             // Triangle Fan: Time minute text block
 //            0.3759f, 0.4000f, 0.5f, 0.5f,
@@ -76,6 +80,18 @@ public class EventRecord extends EventComponent{
         System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
         Log.d(TAG, "init: " + getBottomVerticeYPoint() + " vs " + lowerBound + " vs " + rightBound);
         isClipping = false;
+
+        if(!isClipping){
+            for(int i = 0; i<3; i++){
+                VERTEX_DATA[i * DIMENSION + X] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        VERTEX_DATA[i * DIMENSION + X],
+                        context.getResources().getDisplayMetrics()) + rightBound;
+                VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        VERTEX_DATA[i * DIMENSION + Y],
+                        context.getResources().getDisplayMetrics());
+            }
+        }
+
         if(getBottomVerticeYPoint() < lowerBound){
             float d = (getTopVerticeYPoint() - lowerBound)/(getTopVerticeYPoint() - getBottomVerticeYPoint());
             VERTEX_DATA[0 * DIMENSION + Y] = lowerBound;
@@ -83,9 +99,9 @@ public class EventRecord extends EventComponent{
             VERTEX_DATA[0 * DIMENSION + V] = d;
         }
 
-        float w = Math.abs(VERTEX_DATA[1 * DIMENSION + X] - VERTEX_DATA[2 * DIMENSION + X]);
-        VERTEX_DATA[0 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] = rightBound;
-        VERTEX_DATA[2 * DIMENSION + X] = VERTEX_DATA[0 * DIMENSION + X] - w;
+//        float w = Math.abs(VERTEX_DATA[1 * DIMENSION + X] - VERTEX_DATA[2 * DIMENSION + X]);
+//        VERTEX_DATA[0 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] = rightBound;
+//        VERTEX_DATA[2 * DIMENSION + X] = VERTEX_DATA[0 * DIMENSION + X] - w;
 
 
         vertexArray = new VertexArray(VERTEX_DATA);

@@ -32,6 +32,11 @@ public class EventMinute extends EventText{
 //    protected GLTextView mTextView;
 //    protected VertexArray vertexArray;
 
+    private static final float TIME_WIDTH = 19f;
+    private static final float TIME_HEIGHT = 18f;
+    private static final float TIME_TEXT_SIZE = 16f;
+    private static final float TIME_TEXT_LINESPACING = 1f;
+
     protected float mWidth;
     protected float mHeight;
 
@@ -40,12 +45,19 @@ public class EventMinute extends EventText{
         float[] vertexData = {
                 // Order of coordinates: X, Y, U, V
                 // Triangle Fan: Time minute text block
-                -0.3788f, 0.4095f, 0.25f, 0.5f,
-                -0.45f,   0.3567f, 0.0f,  1.0f,
-                -0.3076f, 0.3567f, 0.5f,  1.0f,
-                -0.3076f, 0.4622f, 0.5f,  0.0f,
-                -0.45f,   0.4622f, 0.0f,  0.0f,
-                -0.45f,   0.3567f, 0.0f,  1.0f
+//                -0.3788f, 0.4095f, 0.25f, 0.5f,
+//                -0.45f,   0.3567f, 0.0f,  1.0f,
+//                -0.3076f, 0.3567f, 0.5f,  1.0f,
+//                -0.3076f, 0.4622f, 0.5f,  0.0f,
+//                -0.45f,   0.4622f, 0.0f,  0.0f,
+//                -0.45f,   0.3567f, 0.0f,  1.0f
+
+                LAYOUT_PADDING_LEFT + TIME_WIDTH / 2f   , -(LAYOUT_PADDING_TOP + TIME_HEIGHT / 2f)  , 0.5f  , 0.5f,
+                LAYOUT_PADDING_LEFT                     , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 0.0f  , 1.0f,
+                LAYOUT_PADDING_LEFT + TIME_WIDTH        , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 1.0f  , 1.0f,
+                LAYOUT_PADDING_LEFT + TIME_WIDTH        , -(LAYOUT_PADDING_TOP)                     , 1.0f  , 0.0f,
+                LAYOUT_PADDING_LEFT                     , -(LAYOUT_PADDING_TOP)                     , 0.0f  , 0.0f,
+                LAYOUT_PADDING_LEFT                     , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 0.0f  , 1.0f
         };
         VERTEX_DATA = vertexData;
 
@@ -73,14 +85,23 @@ public class EventMinute extends EventText{
         mHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
             height,
             mContext.getResources().getDisplayMetrics());
-        if(upper > getTopVerticeYPoint()){
-//            mHeight = 0f;
-        }
+
 
         int frontColor = Color.parseColor(BIG_TEXT_COLOR);
         int backColor = Color.parseColor(BG_COLOR);
 
-        float l = lower + 0.05f;
+        float l = lower + LAYOUT_PADDING_BOTTOM;
+        for(int i = 0; i<6; i++){
+            VERTEX_DATA[i * DIMENSION + X] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    VERTEX_DATA[i * DIMENSION + X],
+                    mContext.getResources().getDisplayMetrics());
+            VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    VERTEX_DATA[i * DIMENSION + Y],
+                    mContext.getResources().getDisplayMetrics());
+
+        }
+
+        Log.d(TAG, "init: getTopVerticeYPoint:" + getTopVerticeYPoint() + " l:" + l);
         if(getTopVerticeYPoint() < l){
             for(int i = 0; i<6; i++){
                 VERTEX_DATA[i * DIMENSION + X] = 0f;
@@ -90,15 +111,17 @@ public class EventMinute extends EventText{
         else if(getBottomVerticeYPoint() < l){
             float r = (VERTEX_DATA[3 * DIMENSION + Y] - l)/(VERTEX_DATA[3 * DIMENSION + Y] - VERTEX_DATA[1 * DIMENSION + Y]);
             float d = r * 1.0f;
-            VERTEX_DATA[0 * DIMENSION + Y] = (l + VERTEX_DATA[3 * DIMENSION + Y])/2f;
-            VERTEX_DATA[1 * DIMENSION + Y] = l;
-            VERTEX_DATA[2 * DIMENSION + Y] = l;
-            VERTEX_DATA[5 * DIMENSION + Y] = l;
+//            VERTEX_DATA[0 * DIMENSION + Y] = (l + VERTEX_DATA[3 * DIMENSION + Y])/2f;
+//            VERTEX_DATA[1 * DIMENSION + Y] = l;
+//            VERTEX_DATA[2 * DIMENSION + Y] = l;
+//            VERTEX_DATA[5 * DIMENSION + Y] = l;
+//
+//            VERTEX_DATA[0 * DIMENSION + V] = d/2f;
+//            VERTEX_DATA[1 * DIMENSION + V] = d;
+//            VERTEX_DATA[2 * DIMENSION + V] = d;
+//            VERTEX_DATA[5 * DIMENSION + V] = d;
 
-            VERTEX_DATA[0 * DIMENSION + V] = d/2f;
-            VERTEX_DATA[1 * DIMENSION + V] = d;
-            VERTEX_DATA[2 * DIMENSION + V] = d;
-            VERTEX_DATA[5 * DIMENSION + V] = d;
+
 
             if(lower >= l ){
                 backColor = Color.parseColor(MIN_COLOR);
@@ -106,16 +129,15 @@ public class EventMinute extends EventText{
         }
 
 //        textSize = Math.round(textSize);
-        float line = (float)Math.ceil((minute.length() * textSize)/mWidth);
+        float line = (float)Math.ceil(((minute.length()/2) * textSize)/mWidth);
         Log.d(TAG, "init: " + line);
-        vertexArray = new VertexArray(VERTEX_DATA);
-//        int frontColor = Color.parseColor("#ffffffff");
-//        int backColor = Color.parseColor("#ff262626");
-//        mTextView = new GLTextView(minute, typeface, FONT_SIZE, (int)WIDTH, FONT_SIZE + FONT_PADDING , 5, 0, frontColor, backColor, vertexArray, matrix);
 
+        vertexArray = new VertexArray(VERTEX_DATA);
+//        backColor = Color.parseColor("#ff268626");
+        float dy = mContext.getResources().getDisplayMetrics().density + 0.6f;
         mTextView = new GLTextView(minute, typeface,
-                (int)textSize, (int)mWidth, (int)(((int)textSize) * line),
-                5, 0,
+                (int)((int)textSize * dy), (int)(mWidth * dy), (int)(((int)mHeight * dy) * line),
+                0, 0,
                 frontColor,
                 backColor,
                 vertexArray, matrix);

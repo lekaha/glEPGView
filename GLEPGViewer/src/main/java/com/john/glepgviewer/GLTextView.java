@@ -5,11 +5,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.opengl.GLES20;
 import android.os.Build;
+import android.util.Log;
 
 import com.john.glepgviewer.helper.CheckErrorHelper;
 import com.john.glepgviewer.helper.TextureHelper;
@@ -84,8 +84,8 @@ public class GLTextView {
     float fontAscent;                                  // Font Ascent (Above Baseline; Pixels)
     float fontDescent;                                 // Font Descent (Below Baseline; Pixels)
     float charWidthMax;
-    float fontScaleX;
-    float fontScaleY;
+    float fontScaleX = 1;
+    float fontScaleY = 1;
     int fontColor = Color.parseColor("#FFFFFFFF");
     int backgroundColor = Color.parseColor("#FF1A1A1A");
 
@@ -138,8 +138,8 @@ public class GLTextView {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void init(String text, Typeface typeface, int originSize, int originWidth, int originHeight, int paddingLeft, int paddingTop){
-        fontScaleX = (projectionMatrix[0] != 0f)? 1.0f/projectionMatrix[0]: 1f;
-        fontScaleY = (projectionMatrix[5] != 0f)? 1.0f/projectionMatrix[5]: 1f;
+//        fontScaleX = (projectionMatrix[0] != 0f)? 1.0f/projectionMatrix[0]: 1f;
+//        fontScaleY = (projectionMatrix[5] != 0f)? 1.0f/projectionMatrix[5]: 1f;
         charWidthMax = 0;
 
 //        for(int i = 0; i<4; i++){
@@ -149,14 +149,17 @@ public class GLTextView {
 //            Log.d(TAG, "init: " + str);
 //        }
 
-        int width  = (int)((float)originWidth * fontScaleX);
-        int height  = (int)((float)originHeight * (fontScaleY - 0.12f ));
+//        int width  = (int)((float)originWidth * fontScaleX);
+//        int height  = (int)((float)originHeight * (fontScaleY - 0.12f ));
+
+        int width  = originWidth;
+        int height  = originHeight;
 
         float size = originSize;
-//        Log.d(TAG, "init: project=" + projectionMatrix[0] + "*" + projectionMatrix[5]);
-//        Log.d(TAG, "init: scale=" + fontScaleX + "*" + fontScaleY);
-//        Log.d(TAG, "init: view =" + width + "*" + height);
-//        Log.d(TAG, "init: originSize=" + originSize + " size=" + size);
+        Log.d(TAG, "init: project=" + projectionMatrix[0] + "*" + projectionMatrix[5]);
+        Log.d(TAG, "init: scale=" + fontScaleX + "*" + fontScaleY);
+        Log.d(TAG, "init: view =" + width + "*" + height);
+        Log.d(TAG, "init: originSize=" + originSize + " size=" + size);
 
         Bitmap bitmap = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_8888);  // Create Bitmap
 //        bitmap.setHasAlpha(true);
@@ -167,32 +170,33 @@ public class GLTextView {
         paint.setFilterBitmap(true);
         paint.setAntiAlias( true );                     // Enable Anti Alias
         paint.setTextSize( size );                      // Set Text Size
+        paint.setSubpixelText(true);
         paint.setColor( fontColor);                     // Set ARGB (White, Opaque)
-        paint.setTextScaleX(fontScaleX);
+//        paint.setTextScaleX(fontScaleX + 0.1f);
         paint.setTypeface( typeface );
 
 
         // get font metrics
         Paint.FontMetrics fm = paint.getFontMetrics();  // Get Font Metrics
-        fontHeight = (float)Math.ceil(fm.descent - fm.top + 1f);  // Calculate Font Height
+        fontHeight = (float)Math.ceil(fm.descent - fm.top);  // Calculate Font Height
         fontAscent = (float)Math.ceil( Math.abs( fm.ascent ) );  // Save Font Ascent
         fontDescent = (float)Math.ceil( Math.abs( fm.descent ) );  // Save Fo0nt Descent
 
-        Matrix m = new Matrix();
-        m.postTranslate(0f, -(0.2143f * size));//m.postTranslate(0f, (size-25.5f));
-        canvas.setMatrix(m);
+//        Matrix m = new Matrix();
+//        m.postTranslate(0f, -(0.2143f * size));//m.postTranslate(0f, (size-25.5f));
+//        canvas.setMatrix(m);
 
-        paddingTop++;
+//        paddingTop++;
         String[] lines = StringFormat(text, (width), (int)(size * fontScaleX));
         for(int i = 1; i<=lines.length; i++){
 //            Log.d(TAG, "init: " + lines[i-1] + " fontHeight=" + fontHeight);
             if(1 == i)
-                canvas.drawText( lines[i-1], paddingLeft, paddingTop + ((fontHeight) * (i)), paint );        // Draw Character
+                canvas.drawText( lines[i-1], paddingLeft, paddingTop + ((size) * (i)) + 5, paint );        // Draw Character
             else
-                canvas.drawText( lines[i-1], paddingLeft, paddingTop + ((fontHeight) * (i)) + 1, paint );        // Draw Character
+                canvas.drawText( lines[i-1], paddingLeft, paddingTop + ((size) * (i)) + 5, paint );        // Draw Character
         }
 
-        bitmap.prepareToDraw();
+//        bitmap.prepareToDraw();
         init(bitmap);
 
         // Recycle the bitmap, since its data has been loaded into
@@ -316,11 +320,13 @@ public class GLTextView {
             // If this condition is true, so that mean to a character in the last line.
             if((index0 + 1) == index1){
 //                Log.d(TAG, "[StringFormat] the last line (" + index0 + "," + (index1 - 1) + ")" + text.charAt(index0));
-                String last = tempR.lastElement();
-                last += String.valueOf(text.charAt(index0));
-                tempR.set(tempR.size() - 1, last);
-//                Log.d(TAG, "[StringFormat] the last line = " + last);
-                break;
+                if(0 < tempR.size()){
+                    String last = tempR.lastElement();
+                    last += String.valueOf(text.charAt(index0));
+                    tempR.set(tempR.size() - 1, last);
+    //                Log.d(TAG, "[StringFormat] the last line = " + last);
+                    break;
+                }
             }
 
             lines++;

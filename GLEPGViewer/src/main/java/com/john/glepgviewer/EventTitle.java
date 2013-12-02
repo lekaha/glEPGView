@@ -11,33 +11,21 @@ import android.util.TypedValue;
  */
 public class EventTitle extends EventText {
 
-//    private static final int FONT_SIZE = 16;
-//    private static final int FONT_PADDING = 2;
-//    private static final float WIDTH = 145f;
-//
-//    protected float[] VERTEX_DATA = {
-//            // Triangle Fan: Time minute text block
-//            -0.00f, 0.2917f, 0.4625f, 0.55f,
-//            -0.45f, 0.2222f, 0.0f, 1.1f,
-//             0.45f, 0.2222f, 0.925f, 1.1f,
-//             0.45f, 0.3611f, 0.925f, 0.0f,
-//            -0.45f, 0.3611f, 0.0f, 0.0f,
-//            -0.45f, 0.2222f, 0.0f, 1.1f
-//    };
+    private static final float TITLE_WIDTH = 19f;
+    private static final float TITLE_HEIGHT = 18f;
 
-//    protected GLTextView mTextView;
-//    protected VertexArray vertexArray;
+    private static final float WIDTH = 145f;
 
     @Override
     protected void init(boolean nothing){
         float[] vertexData = {
             // Triangle Fan: Time minute text block
-            -0.00f, 0.2892f, 0.4625f, 0.55f,
-            -0.45f, 0.2372f, 0.0f, 1.1f,
-             0.45f, 0.2372f, 0.925f, 1.1f,
-             0.45f, 0.3611f, 0.925f, 0.0f,
-            -0.45f, 0.3611f, 0.0f, 0.0f,
-            -0.45f, 0.2372f, 0.0f, 1.1f
+            WIDTH/2f,                       -TITLE_HEIGHT/2f,   0.5f, 0.5f,
+            LAYOUT_PADDING_LEFT,            -TITLE_HEIGHT,      0.0f, 1.0f,
+            WIDTH - LAYOUT_PADDING_RIGHT,   -TITLE_HEIGHT,      1.0f, 1.0f,
+            WIDTH - LAYOUT_PADDING_RIGHT,   0f,                 1.0f, 0.0f,
+            LAYOUT_PADDING_LEFT,            0f,                 0.0f, 0.0f,
+            LAYOUT_PADDING_LEFT,            -TITLE_HEIGHT,      0.0f, 1.0f
         };
         VERTEX_DATA = vertexData;
     }
@@ -50,7 +38,7 @@ public class EventTitle extends EventText {
     public EventTitle(Context context, String title, Typeface typeface,
                       float textSize, float width, float height,
                       float upperBound, float lowerBound, float rightBound,
-                      float[] projectionMatrix){
+                      float[] matrix){
         mContext = context;
         textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 textSize,
@@ -58,9 +46,9 @@ public class EventTitle extends EventText {
         width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 width,
                 mContext.getResources().getDisplayMetrics());
-        width -= 10f;
-        float[] matrix = new float[16];
-        System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
+//        width -= 10f;
+
+        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
         float upper = upperBound + 0.00f;
         float lower = lowerBound + 0.05f;
 
@@ -79,7 +67,26 @@ public class EventTitle extends EventText {
                 + " h=" + h
                 + " d=" + d
                 + " bound=" + bound
+                + " density=" + mContext.getResources().getDisplayMetrics().density
         );
+
+        for(int i = 0; i<6; i++){
+            VERTEX_DATA[i * DIMENSION + X] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    VERTEX_DATA[i * DIMENSION + X],
+                    mContext.getResources().getDisplayMetrics());
+            VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    VERTEX_DATA[i * DIMENSION + Y] * line,
+                    mContext.getResources().getDisplayMetrics())
+                    + upperBound
+                    + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    -LAYOUT_PADDING_TOP,
+                    mContext.getResources().getDisplayMetrics());
+
+        }
+
+
+
+
 
         if(upper <= lower){
             Log.d(TAG, "init: Case1");
@@ -111,29 +118,31 @@ public class EventTitle extends EventText {
 //            bound -= (0.04f * w);
 
             d = (upper + bound)/2f;
-            VERTEX_DATA[1 * DIMENSION + V] = 1.0f;
-            VERTEX_DATA[2 * DIMENSION + V] = 1.0f;
-            VERTEX_DATA[5 * DIMENSION + V] = 1.0f;
-            VERTEX_DATA[3 * DIMENSION + V] = 0.0f;
-            VERTEX_DATA[4 * DIMENSION + V] = 0.0f;
-            VERTEX_DATA[0 * DIMENSION + V] = 0.5f;
+//            VERTEX_DATA[1 * DIMENSION + V] = 1.0f;
+//            VERTEX_DATA[2 * DIMENSION + V] = 1.0f;
+//            VERTEX_DATA[5 * DIMENSION + V] = 1.0f;
+//            VERTEX_DATA[3 * DIMENSION + V] = 0.0f;
+//            VERTEX_DATA[4 * DIMENSION + V] = 0.0f;
+//            VERTEX_DATA[0 * DIMENSION + V] = 0.5f;
         }
-        VERTEX_DATA[0 * DIMENSION + Y] = d;
-        VERTEX_DATA[1 * DIMENSION + Y] = bound;
-        VERTEX_DATA[2 * DIMENSION + Y] = bound;
-        VERTEX_DATA[3 * DIMENSION + Y] = upper;
-        VERTEX_DATA[4 * DIMENSION + Y] = upper;
-        VERTEX_DATA[5 * DIMENSION + Y] = bound;
-
-        VERTEX_DATA[2 * DIMENSION + X] = rightBound - 0.05f;
-        VERTEX_DATA[3 * DIMENSION + X] = rightBound - 0.05f;
-        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[2 * DIMENSION + X] + VERTEX_DATA[1 * DIMENSION + X])/2f;
+//        VERTEX_DATA[0 * DIMENSION + Y] = d;
+//        VERTEX_DATA[1 * DIMENSION + Y] = bound;
+//        VERTEX_DATA[2 * DIMENSION + Y] = bound;
+//        VERTEX_DATA[3 * DIMENSION + Y] = upper;
+//        VERTEX_DATA[4 * DIMENSION + Y] = upper;
+//        VERTEX_DATA[5 * DIMENSION + Y] = bound;
+//
+//        VERTEX_DATA[2 * DIMENSION + X] = rightBound - 0.05f;
+//        VERTEX_DATA[3 * DIMENSION + X] = rightBound - 0.05f;
+//        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[2 * DIMENSION + X] + VERTEX_DATA[1 * DIMENSION + X])/2f;
 
         Log.d(TAG, "init: text size = " + textSize + " height=" + ((int)textSize + FONT_PADDING + FONT_PADDING ) * line);
         vertexArray = new VertexArray(VERTEX_DATA);
+//        backColor = Color.parseColor("#ff268626");
+        float dy = mContext.getResources().getDisplayMetrics().density + 0.8f;
         mTextView = new GLTextView(title, typeface,
-                (int)textSize, (int)(width), (int)(textSize * line),
-                0, 0, frontColor, backColor, vertexArray, matrix);
+                (int)((int)(textSize) * dy), (int)(width * dy), (int)((textSize * dy) * line ),
+                0, -3, frontColor, backColor, vertexArray, projectionMatrix);
     }
 
     public EventTitle(Context context, Typeface typeface, float[] projectionMatrix){
@@ -145,7 +154,8 @@ public class EventTitle extends EventText {
 
     public float getCenterVerticeYPoint(){return VERTEX_DATA[0 * DIMENSION + Y];}
     public float getTopVerticeYPoint(){return VERTEX_DATA[3 * DIMENSION + Y];}
-    public float getBottomVerticeYPoint(){return VERTEX_DATA[1 * DIMENSION + Y];}
+    public float getBottomVerticeYPoint(){return VERTEX_DATA[1 * DIMENSION
+            + Y];}
 
     public void bindData() {
         mTextView.bindData();

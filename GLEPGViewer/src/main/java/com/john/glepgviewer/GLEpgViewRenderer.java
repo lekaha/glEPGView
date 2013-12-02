@@ -34,7 +34,7 @@ public class GLEpgViewRenderer extends GLRenderer {
     public void onCreate(int width, int height, boolean contextLost) {
         Log.d(TAG, "[onCreate] Entry");
         glClearColor(clearColor.Red, clearColor.Green, clearColor.Blue, 0.0f);
-        glViewport(0, 0, width, height);
+        glViewport(0 - (width/2), 0 + (height/2), width, height);
 
         Resources r = mContext.getResources();
         float px_W = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, //Convert to dp value
@@ -48,7 +48,9 @@ public class GLEpgViewRenderer extends GLRenderer {
 
         float[] projectionMatrix = new float[16];
 
-        orthoM(projectionMatrix, 0, -aspectRatio_W, aspectRatio_W, -aspectRatio_H, aspectRatio_H, -1f, 1f);
+//        orthoM(projectionMatrix, 0, -aspectRatio_W, aspectRatio_W, -aspectRatio_H, aspectRatio_H, -1f, 1f);
+        orthoM(projectionMatrix, 0, -width/2f, width/2f, -height/2f, height/2f, -1f, 1f);
+//        orthoM(projectionMatrix, 0, -1, 1, -1, 1, -1f, 1f);
 //        float[] projectionMatrix2 = new float[16];
 //        orthoM(projectionMatrix2, 0, -aspectRatio_H, aspectRatio_H, -aspectRatio_W, aspectRatio_W, -1f, 1f);
         Log.d(TAG, "init: aspectRatio_W = " + aspectRatio_W + " aspectRatio_H = " + aspectRatio_H);

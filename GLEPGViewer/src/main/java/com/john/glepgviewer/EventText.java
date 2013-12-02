@@ -48,4 +48,18 @@ public abstract class EventText extends EventComponent {
         }
         return 0;
     }
+
+    public float getLeftVerticeXPoint(){
+        if(null != VERTEX_DATA){
+            return VERTEX_DATA[1 * DIMENSION + X];
+        }
+        return 0f;
+    }
+
+    public float getRightVerticeXPoint(){
+        if(null != VERTEX_DATA){
+            return VERTEX_DATA[2 * DIMENSION + X];
+        }
+        return 0f;
+    }
 }

@@ -2,6 +2,8 @@ package com.john.glepgviewer;
 
 import android.content.Context;
 
+import com.john.glepgviewer.util.FontHandle;
+
 /**
  * Created by john on 11/15/13.
  */
@@ -35,48 +37,51 @@ public class GLEventView {
                 projectionMatrix);
         EventComponent.EventRec blockRec = mEventBlock.new EventRec();
 
-//        mEventMinute = new EventMinute(mContext, eventMinute,
-//                FontHandle.getInstance().getFontTypeface(),
-//                24f,
-//                58f,
-//                10f,
-//                mEventBlock.getTopVerticeYPoint(),
-//                mEventBlock.getBottomVerticeYPoint(),
-//                projectionMatrix);
-//        if(isFavorGenre){
-//            mEventGenre = new EventGenre(mContext,
-//                    eventGenreResId,
-//                    mEventBlock.getTopVerticeYPoint(),
-//                    mEventBlock.getBottomVerticeYPoint(),
-//                    projectionMatrix);
-//        }
-//        mEventRecord = new EventRecord(mContext,
-//                recordStatusResId,
-//                blockRec.getTopBound(),
-//                blockRec.getBottomBound(),
-//                mEventBlock.getRightVerticeXPoint(),
-//                projectionMatrix);
-//        mEventTitle = new EventTitle(mContext,
-//                eventTitle,
-//                FontHandle.getInstance().getFontTypeface(),
-//                16f,
-//                143f * merge,
-//                mEventBlock.getBottomVerticeYPoint(),
-//                mEventMinute.getBottomVerticeYPoint(),
-//                mEventBlock.getBottomVerticeYPoint(),
-//                mEventBlock.getRightVerticeXPoint(),
-//                projectionMatrix);
-//        mEventDescription = new EventDescription(
-//                mContext,
-//                eventDecription,
-//                FontHandle.getInstance().getFontTypeface(),
-//                14f,
-//                145f * merge,
-//                mEventBlock.getBottomVerticeYPoint(),
-//                mEventTitle.getBottomVerticeYPoint(),
-//                mEventBlock.getBottomVerticeYPoint(),
-//                mEventBlock.getRightVerticeXPoint(),
-//                projectionMatrix);
+        mEventMinute = new EventMinute(mContext, eventMinute,
+                FontHandle.getInstance().getFontTypeface(),
+                16f,
+                19f,
+                18f,
+                mEventBlock.getTopVerticeYPoint(),
+                mEventBlock.getBottomVerticeYPoint(),
+                projectionMatrix);
+        if(isFavorGenre){
+            mEventGenre = new EventGenre(mContext,
+                    eventGenreResId,
+                    mEventMinute.getRightVerticeXPoint(),
+                    0,
+                    mEventBlock.getTopVerticeYPoint(),
+                    mEventBlock.getBottomVerticeYPoint(),
+                    projectionMatrix);
+            ((EventGenre)mEventGenre).setMarginLeft(mEventMinute.getRightVerticeXPoint());
+        }
+        mEventRecord = new EventRecord(mContext,
+                recordStatusResId,
+                blockRec.getTopBound(),
+                blockRec.getBottomBound(),
+                mEventBlock.getRightVerticeXPoint(),
+                projectionMatrix);
+        mEventTitle = new EventTitle(mContext,
+                eventTitle,
+                FontHandle.getInstance().getFontTypeface(),
+                16f,
+                138f * merge,
+                mEventBlock.getBottomVerticeYPoint(),
+                mEventMinute.getBottomVerticeYPoint(),
+                mEventBlock.getBottomVerticeYPoint(),
+                mEventBlock.getRightVerticeXPoint(),
+                projectionMatrix);
+        mEventDescription = new EventDescription(
+                mContext,
+                eventDecription,
+                FontHandle.getInstance().getFontTypeface(),
+                14f,
+                140f * merge,
+                mEventBlock.getBottomVerticeYPoint(),
+                mEventTitle.getBottomVerticeYPoint(),
+                mEventBlock.getBottomVerticeYPoint(),
+                mEventBlock.getRightVerticeXPoint(),
+                projectionMatrix);
     }
 
     public void draw(){

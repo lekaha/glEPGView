@@ -11,13 +11,20 @@ public abstract class EventComponent {
     protected final static int X = 0, Y = 1;
     protected final static String MIN_COLOR = "#69a5d7";
     protected final static String BG_COLOR = "#262626";
-    protected final int FONT_PADDING = 2;
+    protected final static int FONT_PADDING = 2;
+
+    protected final static float LAYOUT_PADDING_TOP = 5f;
+    protected final static float LAYOUT_PADDING_LEFT = 9f;
+    protected final static float LAYOUT_PADDING_RIGHT = 9f;
+    protected final static float LAYOUT_PADDING_BOTTOM = 9f;
 
     /* Need to initialize */
     protected int DIMENSION;
     protected int STRIDE;
     protected float[] VERTEX_DATA;
     protected VertexArray vertexArray;
+    protected final float[] projectionMatrix = new float[16];
+//    protected Context mContext
 
     public EventComponent(){
         Log.d(TAG, "ctor: EventComponent");
@@ -31,6 +38,8 @@ public abstract class EventComponent {
     public abstract float getCenterVerticeYPoint();
     public abstract float getTopVerticeYPoint();
     public abstract float getBottomVerticeYPoint();
+    public float getLeftVerticeXPoint(){return 0f;}
+    public float getRightVerticeXPoint(){return 0f;}
 
     public abstract void init();
     public abstract void bindData();
