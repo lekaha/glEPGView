@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.opengl.GLES20;
 import android.os.Build;
+import android.text.TextPaint;
 import android.util.Log;
 
 import com.john.glepgviewer.helper.CheckErrorHelper;
@@ -90,7 +91,7 @@ public class GLTextView {
     int backgroundColor = Color.parseColor("#FF1A1A1A");
 
     public GLTextView(String text, Typeface typeface, int size, int width, int height, VertexArray vertices){
-        init(text, typeface, size, width, height, 0, 0);
+        init(text, typeface, size, width, height, 0, 0, 0f, 0f);
 
         final float aspectRatio = width > height ?
                 (float) width / (float) height :
@@ -111,21 +112,26 @@ public class GLTextView {
     public GLTextView(String text, Typeface typeface, int size, int width, int height, VertexArray vertices, float[] matrix){
         vertexArray = vertices;
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
-        init(text, typeface, size, width, height, 0, 0);
+        init(text, typeface, size, width, height, 0, 0, 0f, 0f);
     }
 
     public GLTextView(String text, Typeface typeface, int size, int width, int height, int paddingLeft, int paddingTop, VertexArray vertices, float[] matrix){
         vertexArray = vertices;
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
-        init(text, typeface, size, width, height, paddingLeft, paddingTop);
+        init(text, typeface, size, width, height, paddingLeft, paddingTop, 0f, 0f);
     }
 
-    public GLTextView(String text, Typeface typeface, int size, int width, int height, int paddingLeft, int paddingTop, int frontColor, int backColor, VertexArray vertices, float[] matrix){
+    public GLTextView(String text, Typeface typeface,
+                      int size, int width, int height,
+                      int paddingLeft, int paddingTop,
+                      float letterSpacing, float lineSpacing,
+                      int frontColor, int backColor,
+                      VertexArray vertices, float[] matrix){
         vertexArray = vertices;
         fontColor = frontColor;
         backgroundColor = backColor;
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
-        init(text, typeface, size, width, height, paddingLeft, paddingTop);
+        init(text, typeface, size, width, height, paddingLeft, paddingTop, letterSpacing, lineSpacing);
     }
 
     public GLTextView(Context context, int resId, VertexArray vertices, float[] matrix){
@@ -137,7 +143,10 @@ public class GLTextView {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void init(String text, Typeface typeface, int originSize, int originWidth, int originHeight, int paddingLeft, int paddingTop){
+    private void init(String text, Typeface typeface,
+                      int originSize, int originWidth, int originHeight,
+                      int paddingLeft, int paddingTop,
+                      float letterSpacing, float lineSpacing){
 //        fontScaleX = (projectionMatrix[0] != 0f)? 1.0f/projectionMatrix[0]: 1f;
 //        fontScaleY = (projectionMatrix[5] != 0f)? 1.0f/projectionMatrix[5]: 1f;
         charWidthMax = 0;
@@ -166,10 +175,10 @@ public class GLTextView {
 //        bitmap.setHasMipMap(true);
         bitmap.eraseColor(backgroundColor);                // Set Transparent Background (ARGB)
         Canvas canvas = new Canvas( bitmap );           // Create Canvas for Rendering to Bitmap
-        Paint paint = new Paint();                      // Create Android Paint Instance
+        TextPaint paint = new TextPaint();                      // Create Android Paint Instance
         paint.setFilterBitmap(true);
-        paint.setAntiAlias( true );                     // Enable Anti Alias
-        paint.setTextSize( size );                      // Set Text Size
+        paint.setAntiAlias(true);                     // Enable Anti Alias
+        paint.setTextSize(size);                      // Set Text Size
         paint.setSubpixelText(true);
         paint.setColor( fontColor);                     // Set ARGB (White, Opaque)
 //        paint.setTextScaleX(fontScaleX + 0.1f);
@@ -188,12 +197,13 @@ public class GLTextView {
 
 //        paddingTop++;
         String[] lines = StringFormat(text, (width), (int)(size * fontScaleX));
+
+        float dy = paddingTop + (size);
         for(int i = 1; i<=lines.length; i++){
 //            Log.d(TAG, "init: " + lines[i-1] + " fontHeight=" + fontHeight);
-            if(1 == i)
-                canvas.drawText( lines[i-1], paddingLeft, paddingTop + ((size) * (i)) + 5, paint );        // Draw Character
-            else
-                canvas.drawText( lines[i-1], paddingLeft, paddingTop + ((size) * (i)) + 5, paint );        // Draw Character
+            if(1 != i)
+                dy += (size + lineSpacing);
+            canvas.drawText( lines[i-1], paddingLeft, dy, paint );        // Draw Character
         }
 
 //        bitmap.prepareToDraw();

@@ -134,12 +134,12 @@ public class EventMinute extends EventText{
 
         vertexArray = new VertexArray(VERTEX_DATA);
 //        backColor = Color.parseColor("#ff268626");
-        float dy = mContext.getResources().getDisplayMetrics().density + 0.6f;
+        float dy = mContext.getResources().getDisplayMetrics().density + 0.8f;
         mTextView = new GLTextView(minute, typeface,
                 (int)((int)textSize * dy), (int)(mWidth * dy), (int)(((int)mHeight * dy) * line),
                 0, 0,
-                frontColor,
-                backColor,
+                0f, 8f,
+                frontColor, backColor,
                 vertexArray, matrix);
     }
 

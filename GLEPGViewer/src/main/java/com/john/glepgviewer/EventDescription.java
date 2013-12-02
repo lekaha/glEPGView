@@ -150,7 +150,9 @@ public class EventDescription extends EventText {
         float dy = mContext.getResources().getDisplayMetrics().density + 0.8f;
         mTextView = new GLTextView(title, typeface,
             (int)((textSize) * dy), (int)(width * dy), (int)((textSize * line) * dy),
-            0, -3, frontColor, backColor, vertexArray, projectionMatrix);
+            0, -3,
+            0f, 0f,
+            frontColor, backColor, vertexArray, projectionMatrix);
     }
 
     public EventDescription(Context context, Typeface typeface, float[] projectionMatrix){
