@@ -149,12 +149,13 @@ public class EventTitle extends EventText {
                 vertexArray, projectionMatrix);
     }
 
-
-
-    public float getCenterVerticeYPoint(){return VERTEX_DATA[0 * DIMENSION + Y];}
-    public float getTopVerticeYPoint(){return VERTEX_DATA[3 * DIMENSION + Y];}
-    public float getBottomVerticeYPoint(){return VERTEX_DATA[1 * DIMENSION
-            + Y];}
+    @Override
+    public void set(float px, float py){
+        for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
+            VERTEX_DATA[i * DIMENSION + X] += px;
+        }
+        vertexArray.commit();
+    }
 
     public void bindData() {
         mTextView.bindData();

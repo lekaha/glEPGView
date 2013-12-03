@@ -24,7 +24,7 @@ public class EventGenre extends EventComponent{
     protected final static int V = 3;
 
     protected GLImageView mTextView;
-    protected VertexArray vertexArray;
+//    protected VertexArray vertexArray;
 
     @Override
     public void init(){
@@ -72,7 +72,7 @@ public class EventGenre extends EventComponent{
                     context.getResources().getDisplayMetrics()) + left;
             VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     VERTEX_DATA[i * DIMENSION + Y],
-                    context.getResources().getDisplayMetrics());
+                    context.getResources().getDisplayMetrics()) + upper;
         }
 
         if(getTopVerticeYPoint() < l){
@@ -97,6 +97,11 @@ public class EventGenre extends EventComponent{
 
         vertexArray = new VertexArray(VERTEX_DATA);
         mTextView = new GLImageView(context, resId, false, (int)width, (int)height, 0, 0, vertexArray, matrix);
+    }
+
+    @Override
+    public void set(float px, float py){
+        vertexArray.commit();
     }
 
     public void setMarginLeft(float marginLeft){

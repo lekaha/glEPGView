@@ -148,6 +148,15 @@ public class EventBlock extends EventComponent{
         vertexArray = new VertexArray(VERTEX_DATA);
     }
 
+    public void setPosition(float px, float py){
+        for(int i = 0; i<14; i++){
+            VERTEX_DATA[i * DIMENSION + X] += px;
+            VERTEX_DATA[i * DIMENSION + Y] += (-py);
+        }
+
+        vertexArray.commit();
+    }
+
     @Override
     public void bindData() {
         // Bind our data, specified by the variable vertexData, to the vertex

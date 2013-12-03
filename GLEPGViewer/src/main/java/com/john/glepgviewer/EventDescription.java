@@ -153,16 +153,21 @@ public class EventDescription extends EventText {
             vertexArray, projectionMatrix);
     }
 
+    @Override
+    public void set(float px, float py){
+        for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
+            VERTEX_DATA[i * DIMENSION + X] += px;
 
+        }
+        vertexArray.commit();
+    }
 
-    public float getCenterVerticeYPoint(){return VERTEX_DATA[0 * DIMENSION + 1];}
-    public float getTopVerticeYPoint(){return VERTEX_DATA[3 * DIMENSION + 1];}
-    public float getBottomVerticeYPoint(){return VERTEX_DATA[1 * DIMENSION + 1];}
-
+    @Override
     public void bindData() {
         mTextView.bindData();
     }
 
+    @Override
     public void draw(){
 //        mTextView.begin();
         mTextView.draw();

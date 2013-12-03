@@ -83,7 +83,7 @@ public class EventMinute extends EventText{
                     mContext.getResources().getDisplayMetrics());
             VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     VERTEX_DATA[i * DIMENSION + Y],
-                    mContext.getResources().getDisplayMetrics());
+                    mContext.getResources().getDisplayMetrics()) + upper;
 
         }
 
@@ -129,6 +129,14 @@ public class EventMinute extends EventText{
     }
 
 
+    @Override
+    public void set(float px, float py){
+        for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
+            VERTEX_DATA[i * DIMENSION + X] += px;
+
+        }
+        vertexArray.commit();
+    }
 
     @Override
     public void bindData() {

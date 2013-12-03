@@ -43,6 +43,14 @@ public abstract class EventComponent {
     public float getLeftVerticeXPoint(){return 0f;}
     public float getRightVerticeXPoint(){return 0f;}
 
+    public void set(float px, float py){
+        for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
+            VERTEX_DATA[i * DIMENSION + X] += px;
+            VERTEX_DATA[i * DIMENSION + Y] += (-py);
+        }
+        vertexArray.commit();
+    }
+
     public abstract void init();
     public abstract void bindData();
     public abstract void draw();

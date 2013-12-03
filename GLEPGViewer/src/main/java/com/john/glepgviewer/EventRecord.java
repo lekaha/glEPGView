@@ -32,7 +32,7 @@ public class EventRecord extends EventComponent{
     private final static float HEIGHT = 32f;
 
     protected GLImageView mTextView;
-    protected VertexArray vertexArray;
+//    protected VertexArray vertexArray;
     protected boolean isClipping = false;
 
     @Override
@@ -97,7 +97,7 @@ public class EventRecord extends EventComponent{
                         context.getResources().getDisplayMetrics()) + rightBound;
                 VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         VERTEX_DATA[i * DIMENSION + Y],
-                        context.getResources().getDisplayMetrics());
+                        context.getResources().getDisplayMetrics()) + upperBound;
             }
         }
 
@@ -115,6 +115,11 @@ public class EventRecord extends EventComponent{
 
         vertexArray = new VertexArray(VERTEX_DATA);
         mTextView = new GLImageView(context, resId, false, (int)width, (int)height, 0, 0, vertexArray, matrix);
+    }
+
+    @Override
+    public void set(float px, float py){
+        vertexArray.commit();
     }
 
     @Override

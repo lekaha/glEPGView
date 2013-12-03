@@ -18,14 +18,23 @@ import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glVertexAttribPointer;
 
 public class VertexArray {
-    private final FloatBuffer floatBuffer;
-
+    private final float[] raw;
+    private FloatBuffer floatBuffer;
     public VertexArray(float[] vertexData) {
+//        floatBuffer = ByteBuffer
+//                .allocateDirect(vertexData.length * Constants.BYTES_PER_FLOAT)
+//                .order(ByteOrder.nativeOrder())
+//                .asFloatBuffer()
+//                .put(vertexData);
+        raw = vertexData;
+    }
+
+    public void commit(){
         floatBuffer = ByteBuffer
-                .allocateDirect(vertexData.length * Constants.BYTES_PER_FLOAT)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
-                .put(vertexData);
+            .allocateDirect(raw.length * Constants.BYTES_PER_FLOAT)
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
+            .put(raw);
     }
 
     public void setVertexAttribPointer(int dataOffset, int attributeLocation,

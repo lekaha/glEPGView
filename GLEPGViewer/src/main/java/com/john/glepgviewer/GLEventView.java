@@ -1,6 +1,7 @@
 package com.john.glepgviewer;
 
 import android.content.Context;
+import android.util.TypedValue;
 
 import com.john.glepgviewer.util.FontHandle;
 
@@ -31,10 +32,18 @@ public class GLEventView {
             int eventGenreResId,
             boolean isFavorGenre,
             float[] projectionMatrix){
-        merge = 1;
+
+        float pXdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        x,
+                        mContext.getResources().getDisplayMetrics());
+        float pYdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        y,
+                        mContext.getResources().getDisplayMetrics());
+
         mEventBlock = new EventBlock(mContext,
                 merge, 200f,
                 projectionMatrix);
+        mEventBlock.setPosition(pXdp, y);
         EventComponent.EventRec blockRec = mEventBlock.new EventRec();
 
         mEventMinute = new EventMinute(mContext, eventMinute,
@@ -42,6 +51,7 @@ public class GLEventView {
                 mEventBlock.getTopVerticeYPoint(),
                 mEventBlock.getBottomVerticeYPoint(),
                 projectionMatrix);
+        mEventMinute.set(pXdp, pYdp);
         if(isFavorGenre){
             mEventGenre = new EventGenre(mContext,
                     eventGenreResId,
@@ -50,6 +60,7 @@ public class GLEventView {
                     mEventBlock.getTopVerticeYPoint(),
                     mEventBlock.getBottomVerticeYPoint(),
                     projectionMatrix);
+            mEventGenre.set(pXdp, pYdp);
             ((EventGenre)mEventGenre).setMarginLeft(mEventMinute.getRightVerticeXPoint());
         }
         mEventRecord = new EventRecord(mContext,
@@ -58,6 +69,7 @@ public class GLEventView {
                 blockRec.getBottomBound(),
                 mEventBlock.getRightVerticeXPoint(),
                 projectionMatrix);
+        mEventRecord.set(pXdp, pYdp);
         mEventTitle = new EventTitle(mContext,
                 eventTitle,
                 FontHandle.getInstance().getFontTypeface(),
@@ -66,6 +78,7 @@ public class GLEventView {
                 mEventBlock.getBottomVerticeYPoint(),
                 mEventBlock.getRightVerticeXPoint(),
                 projectionMatrix);
+        mEventTitle.set(pXdp, pYdp);
         mEventDescription = new EventDescription(
                 mContext,
                 eventDecription,
@@ -75,6 +88,7 @@ public class GLEventView {
                 mEventBlock.getBottomVerticeYPoint(),
                 mEventBlock.getRightVerticeXPoint(),
                 projectionMatrix);
+        mEventDescription.set(pXdp, pYdp);
     }
 
     public void draw(){
@@ -108,4 +122,6 @@ public class GLEventView {
             mEventDescription.draw();
         }
     }
+
+//    private float timeToHeight(Time startTime, Time endTime)
 }
