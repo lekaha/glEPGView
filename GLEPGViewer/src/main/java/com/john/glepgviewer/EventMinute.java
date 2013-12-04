@@ -20,12 +20,12 @@ public class EventMinute extends EventText{
         float[] vertexData = {
                 // Order of coordinates: X, Y, U, V
                 // Triangle Fan: Time minute text block
-                LAYOUT_PADDING_LEFT + WIDTH / 2f   , -(LAYOUT_PADDING_TOP + TIME_HEIGHT / 2f)  , 0.5f  , 0.5f,
-                LAYOUT_PADDING_LEFT                , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 0.0f  , 1.0f,
-                LAYOUT_PADDING_LEFT + WIDTH        , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 1.0f  , 1.0f,
-                LAYOUT_PADDING_LEFT + WIDTH        , -(LAYOUT_PADDING_TOP)                     , 1.0f  , 0.0f,
-                LAYOUT_PADDING_LEFT                , -(LAYOUT_PADDING_TOP)                     , 0.0f  , 0.0f,
-                LAYOUT_PADDING_LEFT                , -(LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 0.0f  , 1.0f
+                LAYOUT_PADDING_LEFT + WIDTH / 2f   , (LAYOUT_PADDING_TOP + TIME_HEIGHT / 2f)  , 0.5f  , 0.5f,
+                LAYOUT_PADDING_LEFT                , (LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 0.0f  , 1.0f,
+                LAYOUT_PADDING_LEFT + WIDTH        , (LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 1.0f  , 1.0f,
+                LAYOUT_PADDING_LEFT + WIDTH        , (LAYOUT_PADDING_TOP)                     , 1.0f  , 0.0f,
+                LAYOUT_PADDING_LEFT                , (LAYOUT_PADDING_TOP)                     , 0.0f  , 0.0f,
+                LAYOUT_PADDING_LEFT                , (LAYOUT_PADDING_TOP + TIME_HEIGHT)       , 0.0f  , 1.0f
         };
         VERTEX_DATA = vertexData;
 
@@ -73,7 +73,7 @@ public class EventMinute extends EventText{
         float h = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     TIME_HEIGHT,
                     mContext.getResources().getDisplayMetrics()) + paddingBottom;
-        float bound = upper - h;
+        float bound = upper + h;
         int frontColor = Color.parseColor(BIG_TEXT_COLOR);
         int backColor = Color.parseColor(BG_COLOR);
 
@@ -88,15 +88,15 @@ public class EventMinute extends EventText{
         }
 
         Log.d(TAG, "init: getTopVerticeYPoint:" + getTopVerticeYPoint() + " h:" + h);
-        if(getTopVerticeYPoint() < lower){
+        if(getTopVerticeYPoint() > lower){
             for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
                 VERTEX_DATA[i * DIMENSION + X] = 0f;
                 VERTEX_DATA[i * DIMENSION + Y] = 0f;
             }
         }
-        else if(getBottomVerticeYPoint() < lower){
+        else if(getBottomVerticeYPoint() > lower){
             Log.d(TAG, "init: Case2");
-            float r = Math.abs(VERTEX_DATA[3 * DIMENSION + Y] - lower)/Math.abs(h);
+            float r = Math.abs(lower - VERTEX_DATA[3 * DIMENSION + Y])/Math.abs(h);
             VERTEX_DATA[1 * DIMENSION + V] = r;
             VERTEX_DATA[2 * DIMENSION + V] = r;
             VERTEX_DATA[5 * DIMENSION + V] = r;
@@ -108,7 +108,7 @@ public class EventMinute extends EventText{
             VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
 
 
-            if(minHeight >= (Math.abs(VERTEX_DATA[3 * DIMENSION + Y] - lower) + paddingTop) ){
+            if(minHeight >= (Math.abs(lower - VERTEX_DATA[3 * DIMENSION + Y]) + paddingTop) ){
                 backColor = Color.parseColor(MIN_COLOR);
             }
         }

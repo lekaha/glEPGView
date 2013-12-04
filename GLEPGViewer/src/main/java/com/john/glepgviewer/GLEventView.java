@@ -17,6 +17,9 @@ public class GLEventView {
     private EventComponent mEventGenre;
     private EventComponent mEventRecord;
 
+    private float mpXdp;
+    private float mpYdp;
+
     public GLEventView(Context context){
         mContext = context;
     }
@@ -33,17 +36,17 @@ public class GLEventView {
             boolean isFavorGenre,
             float[] projectionMatrix){
 
-        float pXdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+        mpXdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         x,
                         mContext.getResources().getDisplayMetrics());
-        float pYdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+        mpYdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         y,
                         mContext.getResources().getDisplayMetrics());
 
         mEventBlock = new EventBlock(mContext,
                 merge, 200f,
                 projectionMatrix);
-        mEventBlock.setPosition(pXdp, y);
+        mEventBlock.setPosition(mpXdp, mpYdp);
         EventComponent.EventRec blockRec = mEventBlock.new EventRec();
 
         mEventMinute = new EventMinute(mContext, eventMinute,
@@ -51,7 +54,7 @@ public class GLEventView {
                 mEventBlock.getTopVerticeYPoint(),
                 mEventBlock.getBottomVerticeYPoint(),
                 projectionMatrix);
-        mEventMinute.set(pXdp, pYdp);
+        mEventMinute.set(mpXdp, mpYdp);
         if(isFavorGenre){
             mEventGenre = new EventGenre(mContext,
                     eventGenreResId,
@@ -60,7 +63,7 @@ public class GLEventView {
                     mEventBlock.getTopVerticeYPoint(),
                     mEventBlock.getBottomVerticeYPoint(),
                     projectionMatrix);
-            mEventGenre.set(pXdp, pYdp);
+            mEventGenre.set(mpXdp, mpYdp);
             ((EventGenre)mEventGenre).setMarginLeft(mEventMinute.getRightVerticeXPoint());
         }
         mEventRecord = new EventRecord(mContext,
@@ -69,7 +72,7 @@ public class GLEventView {
                 blockRec.getBottomBound(),
                 mEventBlock.getRightVerticeXPoint(),
                 projectionMatrix);
-        mEventRecord.set(pXdp, pYdp);
+        mEventRecord.set(mpXdp, mpYdp);
         mEventTitle = new EventTitle(mContext,
                 eventTitle,
                 FontHandle.getInstance().getFontTypeface(),
@@ -78,7 +81,7 @@ public class GLEventView {
                 mEventBlock.getBottomVerticeYPoint(),
                 mEventBlock.getRightVerticeXPoint(),
                 projectionMatrix);
-        mEventTitle.set(pXdp, pYdp);
+        mEventTitle.set(mpXdp, mpYdp);
         mEventDescription = new EventDescription(
                 mContext,
                 eventDecription,
@@ -88,36 +91,42 @@ public class GLEventView {
                 mEventBlock.getBottomVerticeYPoint(),
                 mEventBlock.getRightVerticeXPoint(),
                 projectionMatrix);
-        mEventDescription.set(pXdp, pYdp);
+        mEventDescription.set(mpXdp, mpYdp);
     }
 
     public void draw(){
         if(null != mEventBlock){
+//            mEventBlock.setPosition(mpXdp, mpYdp);
             mEventBlock.bindData();
             mEventBlock.draw();
         }
 
         if(null != mEventMinute){
+//            mEventMinute.set(mpXdp, mpYdp);
             mEventMinute.bindData();
             mEventMinute.draw();
         }
 
         if(null != mEventGenre){
+//            mEventGenre.set(mpXdp, mpYdp);
             mEventGenre.bindData();
             mEventGenre.draw();
         }
 
-        if(null != mEventTitle){
-            mEventTitle.bindData();
-            mEventTitle.draw();
-        }
-
         if(null !=  mEventRecord){
+//            mEventRecord.set(mpXdp, mpYdp);
             mEventRecord.bindData();
             mEventRecord.draw();
         }
 
+        if(null != mEventTitle){
+//            mEventTitle.set(mpXdp, mpYdp);
+            mEventTitle.bindData();
+            mEventTitle.draw();
+        }
+
         if(null != mEventDescription){
+//            mEventDescription.set(mpXdp, mpYdp);
             mEventDescription.bindData();
             mEventDescription.draw();
         }

@@ -34,12 +34,12 @@ public class EventGenre extends EventComponent{
         float[] vertexData = {
             // Order of coordinates: X, Y, U, V
             // Triangle Fan: Time minute text block
-            GENRE_WIDTH/2f  , -(GENRE_MARGIN_TOP + GENRE_HEIGHT)/2f  , 0.5f, 0.5f,
-            0f              , -(GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 0.0f, 1.0f,
-            GENRE_WIDTH     , -(GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 1.0f, 1.0f,
-            GENRE_WIDTH     , -GENRE_MARGIN_TOP                                         , 1.0f, 0.0f,
-            0f              , -GENRE_MARGIN_TOP                                         , 0.0f, 0.0f,
-            0f              , -(GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 0.0f, 1.0f
+            GENRE_WIDTH/2f  , (GENRE_MARGIN_TOP + GENRE_HEIGHT)/2f  , 0.5f, 0.5f,
+            0f              , (GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 0.0f, 1.0f,
+            GENRE_WIDTH     , (GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 1.0f, 1.0f,
+            GENRE_WIDTH     , GENRE_MARGIN_TOP                                         , 1.0f, 0.0f,
+            0f              , GENRE_MARGIN_TOP                                         , 0.0f, 0.0f,
+            0f              , (GENRE_MARGIN_TOP + GENRE_HEIGHT)                        , 0.0f, 1.0f
         };
         VERTEX_DATA = vertexData;
     }
@@ -74,16 +74,17 @@ public class EventGenre extends EventComponent{
                     VERTEX_DATA[i * DIMENSION + Y],
                     context.getResources().getDisplayMetrics()) + upper;
         }
+        VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
 
-        if(getTopVerticeYPoint() < l){
+        if(getTopVerticeYPoint() > l){
             for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
                 VERTEX_DATA[i * DIMENSION + X] = 0f;
                 VERTEX_DATA[i * DIMENSION + Y] = 0f;
             }
         }
-        else if(getBottomVerticeYPoint() < l){
+        else if(getBottomVerticeYPoint() > l){
             Log.d(TAG, "init: Case2");
-            float r = Math.abs(VERTEX_DATA[3 * DIMENSION + Y] - l)/Math.abs(height);
+            float r = Math.abs(l - VERTEX_DATA[3 * DIMENSION + Y])/Math.abs(height);
             VERTEX_DATA[1 * DIMENSION + V] = r;
             VERTEX_DATA[2 * DIMENSION + V] = r;
             VERTEX_DATA[5 * DIMENSION + V] = r;

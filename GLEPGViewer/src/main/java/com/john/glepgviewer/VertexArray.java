@@ -39,11 +39,13 @@ public class VertexArray {
 
     public void setVertexAttribPointer(int dataOffset, int attributeLocation,
                                        int componentCount, int stride) {
-        floatBuffer.position(dataOffset);
-        glVertexAttribPointer(attributeLocation, componentCount, GL_FLOAT,
-                false, stride, floatBuffer);
-        glEnableVertexAttribArray(attributeLocation);
+        if(null != floatBuffer){
+            floatBuffer.position(dataOffset);
+            glVertexAttribPointer(attributeLocation, componentCount, GL_FLOAT,
+                    false, stride, floatBuffer);
+            glEnableVertexAttribArray(attributeLocation);
 
-        floatBuffer.position(0);
+            floatBuffer.position(0);
+        }
     }
 }

@@ -9,21 +9,6 @@ import android.util.TypedValue;
  * Created by john on 11/6/13.
  */
 public class EventRecord extends EventComponent{
-
-//    protected float[] VERTEX_DATA = {
-//            // Triangle Fan: Time minute text block
-////            -0.25f, 0.38f, 0.5f, 0.5f,
-////            -0.30f, 0.33f, 0.0f, 1.0f,
-////            -0.20f, 0.33f, 1.0f, 1.0f,
-////            -0.20f, 0.43f, 1.0f, 0.0f,
-////            -0.30f, 0.43f, 0.0f, 0.0f,
-////            -0.30f, 0.33f, 0.0f, 1.0f
-//
-//            // Triangle Fan
-//            0.50f, 0.30f, 1.0f, 1.0f,
-//            0.50f, 0.50f, 1.0f, 0.0f,
-//            0.2517f, 0.50f, 0.0f, 0.0f
-//    };
     protected final static int V = 3;
     protected final static int POSITION_COMPONENT_COUNT = 2;
     protected final static int TEXTURE_COMPONENT_COUNT = 2;
@@ -42,7 +27,7 @@ public class EventRecord extends EventComponent{
 
         float[] vertexData = {
             // Triangle
-            0, -HEIGHT, 1.0f, 1.0f,
+            0, HEIGHT, 1.0f, 1.0f,
             0, 0, 1.0f, 0.0f,
             -WIDTH, 0, 0.0f, 0.0f,
 
@@ -101,8 +86,8 @@ public class EventRecord extends EventComponent{
             }
         }
 
-        if(getBottomVerticeYPoint() < lowerBound){
-            float d = (getTopVerticeYPoint() - lowerBound)/(getTopVerticeYPoint() - getBottomVerticeYPoint());
+        if(getBottomVerticeYPoint() > lowerBound){
+            float d = (lowerBound - getTopVerticeYPoint())/(getBottomVerticeYPoint() - getTopVerticeYPoint());
             VERTEX_DATA[0 * DIMENSION + Y] = lowerBound;
 //            Log.d(TAG, "init: " + getBottomVerticeYPoint() + " vs " + lowerBound + " d = " + d);
             VERTEX_DATA[0 * DIMENSION + V] = d;

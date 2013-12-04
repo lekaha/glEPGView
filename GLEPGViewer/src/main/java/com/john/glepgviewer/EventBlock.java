@@ -115,7 +115,7 @@ public class EventBlock extends EventComponent{
                 mContext.getResources().getDisplayMetrics());
 
         System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
-        float h = -mHeight;// * projectionMatrix[Y * 4 + Y];
+        float h = mHeight;// * projectionMatrix[Y * 4 + Y];
 
         VERTEX_DATA[1 * DIMENSION + Y] = VERTEX_DATA[3 * DIMENSION + Y] + h;
         VERTEX_DATA[2 * DIMENSION + Y] = VERTEX_DATA[3 * DIMENSION + Y] + h;
@@ -151,7 +151,7 @@ public class EventBlock extends EventComponent{
     public void setPosition(float px, float py){
         for(int i = 0; i<14; i++){
             VERTEX_DATA[i * DIMENSION + X] += px;
-            VERTEX_DATA[i * DIMENSION + Y] += (-py);
+            VERTEX_DATA[i * DIMENSION + Y] += (py);
         }
 
         vertexArray.commit();
