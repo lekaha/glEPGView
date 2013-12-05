@@ -16,7 +16,14 @@ import static android.opengl.Matrix.orthoM;
  */
 public class GLEpgViewRenderer extends GLRenderer {
     private static final String TAG = "GLEpgViewRenderer";
-    private final static int SIZE = 20;
+    //Ex: ISDB-S total program = 51,
+    // suppose:
+    // 1. Average a event per half-hour.
+    // 2. suppose two seconds of programs have the same event.
+    //
+    // => total events = (51 * 0.5 * 24 * 2) * 0.5 + (51 * 0.5 * 24 * 2) =
+//    private final static int SIZE = 1836;
+    private final static int SIZE = 200;
 
     private Context mContext;
     private GLEventView mGLEventView;
@@ -24,67 +31,75 @@ public class GLEpgViewRenderer extends GLRenderer {
     private int mHeight = 0;
     private ColorConverter.GLColor clearColor = ColorConverter.toGLColor("#333333");
     private GLEventView[] mGLEventViewArray = new GLEventView[SIZE];
+    private float[] projectionMatrix = new float[16];
+    private boolean isSingleMode = true;
 
     public GLEpgViewRenderer(Context context){
         mContext = context;
     }
 
+    private int viewWidth;
+    private int viewHeight;
+
     @Override
     public void onCreate(int width, int height, boolean contextLost) {
         Log.d(TAG, "[onCreate] Entry");
         glClearColor(clearColor.Red, clearColor.Green, clearColor.Blue, 0.0f);
-        mWidth = width;
-        mHeight = height;
-        glViewport(0 , 0 , width, height);
+        viewWidth = width;
+        viewHeight = height;
+        mWidth = viewWidth * 2;
+        mHeight = viewHeight * 2;
 
-        float[] projectionMatrix = new float[16];
-        orthoM(projectionMatrix, 0, 0, width, height, 0, -1f, 1f);
+        glViewport(0 , -viewHeight , mWidth, mHeight);
+
+
+        orthoM(projectionMatrix, 0, 0, mWidth , mHeight, 0, -1f, 1f);
         for(int i = 0; i<4; i++){
             String str = "";
             for(int j = 0; j<4; j++)
                 str += (projectionMatrix[i*4+j] + " ");
             Log.d(TAG, "init: " + str);
         }
-
-        mGLEventView = new GLEventView(mContext);
-        mGLEventView.bind(
-                50f, 150f,
-                1,
-                "00",
-                "にっぽん再発見！瀬戸内物語　私のとっておきの１枚　写真募集「山口」",
-                "「にっぽん再発見　瀬戸内物語」私のとっておきの一枚に投稿された写真を紹介する１分ミニ番組。今回は、山口県。更なる投稿も呼びかける。",
-                R.drawable.epg_icon_recording_status_period,
-                R.drawable.epg_dropdown_menu_genre_icon_0_all,
-                true,
-                projectionMatrix);
-
-        for(int i = 0; i<SIZE; i++){
-            if((i % 2) == 1){
-                mGLEventViewArray[i] = new GLEventView(mContext);
-                mGLEventViewArray[i].bind(
-                        0f, 0f + ((i + 1) * 20),
-                        1,
-                        "00",
-                        "にっぽん再発見！瀬戸内物語　私のとっておきの１枚　写真募集「山口」",
-                        "「にっぽん再発見　瀬戸内物語」私のとっておきの一枚に投稿された写真を紹介する１分ミニ番組。今回は、山口県。更なる投稿も呼びかける。",
-                        R.drawable.epg_icon_recording_status_period,
-                        R.drawable.epg_dropdown_menu_genre_icon_0_all,
-                        true,
-                        projectionMatrix);
-            }
-            else{
-                mGLEventViewArray[i] = new GLEventView(mContext);
-                mGLEventViewArray[i].bind(
-                        0f + ((i + 1) * 30), 0f,
-                        1,
-                        "00",
-                        "にっぽん再発見！瀬戸内物語　私のとっておきの１枚　写真募集「山口」",
-                        "「にっぽん再発見　瀬戸内物語」私のとっておきの一枚に投稿された写真を紹介する１分ミニ番組。今回は、山口県。更なる投稿も呼びかける。",
-                        R.drawable.epg_icon_recording_status_period,
-                        R.drawable.epg_dropdown_menu_genre_icon_0_all,
-                        true,
-                        projectionMatrix);
-            }
+        if(isSingleMode){
+            mGLEventView = new GLEventView(mContext);
+            mGLEventView.bind(
+                    0f, 0f,
+                    1,
+                    "00",
+                    "にっぽん再発見！瀬戸内物語　私のとっておきの１枚　写真募集「山口」",
+                    "「にっぽん再発見　瀬戸内物語」私のとっておきの一枚に投稿された写真を紹介する１分ミニ番組。今回は、山口県。更なる投稿も呼びかける。",
+                    R.drawable.epg_icon_recording_status_period,
+                    R.drawable.epg_dropdown_menu_genre_icon_0_all,
+                    true,
+                    projectionMatrix);
+        }
+        else{
+//        new Thread(new Runnable(){
+//            @Override
+//            public void run() {
+                float y = 0;
+                for(int i = 0, j = 0; i<SIZE; i++, j++){
+                    if((i != 0) && ((i % 20) == 0)){
+                        y += 50f;
+                        j = -1;
+                    }
+                    else{
+                        int interval = 60;
+                        mGLEventViewArray[i] = new GLEventView(mContext);
+                        mGLEventViewArray[i].bind(
+                                0f + ((j) * interval), y,
+                                1,
+                                "00",
+                                "にっぽん再発見！瀬戸内物語　私のとっておきの１枚　写真募集「山口」",
+                                "「にっぽん再発見　瀬戸内物語」私のとっておきの一枚に投稿された写真を紹介する１分ミニ番組。今回は、山口県。更なる投稿も呼びかける。",
+                                R.drawable.epg_icon_recording_status_period,
+                                R.drawable.epg_dropdown_menu_genre_icon_0_all,
+                                true,
+                                projectionMatrix);
+                    }
+                }
+//            }
+//        }, "preparing glview"){}.start();
         }
     }
 
@@ -92,11 +107,16 @@ public class GLEpgViewRenderer extends GLRenderer {
     public void onDrawFrame(boolean firstDraw) {
         // Clear the rendering surface.
         glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        glViewport((int)mdX , (int)mdY , mWidth, mHeight);
+        glViewport((int)mdX , (int)mdY - viewHeight , mWidth, mHeight);
 
-        mGLEventView.draw();
-        for(int i = 0; i<SIZE; i++){
-            mGLEventViewArray[i].draw();
+        if(isSingleMode){
+            mGLEventView.draw();
+        }
+        else{
+            for(int i = 0; i<SIZE; i++){
+                if(null != mGLEventViewArray[i])
+                    mGLEventViewArray[i].draw();
+            }
         }
     }
 
@@ -108,7 +128,13 @@ public class GLEpgViewRenderer extends GLRenderer {
         mdX = mPreviousX + dx;
          mdY = mPreviousY - dy;
         Log.d(TAG, "[setMove] Dx = " + mdX + " Dy = " + mdY);
-        glViewport((int)mdX , (int)mdY , mWidth, mHeight);
+//        glViewport((int)mdX , (int)mdY , mWidth, mHeight);
+    }
+
+    public void setPosition(float x, float y){
+        mdX = (x);
+        mdY = (-y);
+        Log.d(TAG, "[setPosition] setMove x = " + mdX + " y = " + mdY);
     }
 
 

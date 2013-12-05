@@ -26,6 +26,8 @@ public class TestGLSurfaceView extends GLSurfaceView {
 
     private float mPreviousX;
     private float mPreviousY;
+    private float dx;
+    private float dy;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -38,17 +40,19 @@ public class TestGLSurfaceView extends GLSurfaceView {
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mPreviousX = 0;
-                mPreviousY = 0;
+//                mPreviousX = e.getX();
+//                mPreviousY = e.getY();
+                mGLEpgViewRenderer.setMove(
+                        0, 0);
                 break;
             case MotionEvent.ACTION_UP:
-                mPreviousX = e.getX();
-                mPreviousY = e.getY();
+                mPreviousX = dx;
+                mPreviousY = dy;
+                mGLEpgViewRenderer.setPosition(mPreviousX, mPreviousY);
                 break;
             case MotionEvent.ACTION_MOVE:
-
-                float dx = e.getX() - mPreviousX;
-                float dy = e.getY() - mPreviousY;
+                dx = e.getX() - mPreviousX;
+                dy = e.getY() - mPreviousY;
 
 //                // reverse direction of rotation above the mid-line
 //                if (y > getHeight() / 2) {
