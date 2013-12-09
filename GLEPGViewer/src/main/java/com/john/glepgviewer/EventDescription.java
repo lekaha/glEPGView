@@ -3,7 +3,6 @@ package com.john.glepgviewer;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.util.TypedValue;
 
 /**
@@ -116,7 +115,7 @@ public class EventDescription extends EventText {
 
         // It can't show because not enough event's height.
         if((0 == upper) || (upper > lower)){
-            Log.d(TAG, "init: Case1");
+//            Log.d(TAG, "init: Case1");
 
             for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
                 VERTEX_DATA[i * DIMENSION + X] = 0f;
@@ -125,7 +124,7 @@ public class EventDescription extends EventText {
         }
         // It only can show part of entire information because not enough event's height.
         else if( bound > lower){
-            Log.d(TAG, "init: Case2");
+//            Log.d(TAG, "init: Case2");
             float r = Math.abs(lower - VERTEX_DATA[3 * DIMENSION + Y])/Math.abs(h);
             VERTEX_DATA[1 * DIMENSION + V] = r;
             VERTEX_DATA[2 * DIMENSION + V] = r;
@@ -138,7 +137,7 @@ public class EventDescription extends EventText {
             VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
         }
 
-        Log.d(TAG, "init: text size = " + size + " height=" + ((int)size + lineSpacing ) * line);
+//        Log.d(TAG, "init: text size = " + size + " height=" + ((int)size + lineSpacing ) * line);
 
         vertexArray = new VertexArray(VERTEX_DATA);
 //        backColor = Color.parseColor("#ff265626");

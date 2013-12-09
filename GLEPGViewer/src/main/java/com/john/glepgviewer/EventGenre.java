@@ -74,6 +74,7 @@ public class EventGenre extends EventComponent{
                     VERTEX_DATA[i * DIMENSION + Y],
                     context.getResources().getDisplayMetrics()) + upper;
         }
+        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[1 * DIMENSION + X] + VERTEX_DATA[2 * DIMENSION + X])/2f;
         VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
 
         if(getTopVerticeYPoint() > l){

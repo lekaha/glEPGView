@@ -25,42 +25,7 @@ public class MainActivity extends Activity {
 
         FontHandle.getInstance().setupFont(this, FontHandle.FONT_COUNTRY_ID.JP, "aribfont", 3, 1);
 
-
-//        if (savedInstanceState == null) {
-//            getFragmentManager().beginTransaction()
-//                    .add(R.id.container, new PlaceholderFragment())
-//                    .commit();
-//        }
-//        Matrix m = new Matrix();
-//        m.postScale(2,2);
-//        Bitmap bitmap = Bitmap.createBitmap( 100, 100, Bitmap.Config.ARGB_4444);  // Create Bitmap
-//        Canvas canvas = new Canvas( bitmap );           // Create Canvas for Rendering to Bitmap
-//        bitmap.eraseColor(Color.parseColor("#FF1A1A1A"));                // Set Transparent Background (ARGB)
-//        canvas.setMatrix(m);
-//        Paint paint = new Paint();                      // Create Android Paint Instance
-//
-//        paint.setAntiAlias( true );                     // Enable Anti Alias
-//        paint.setTextSize( 16 );                      // Set Text Size
-//        paint.setColor( Color.WHITE);                     // Set ARGB (White, Opaque)
-//        paint.setTypeface(Typeface.DEFAULT );
-//        paint.clearShadowLayer();
-//        canvas.drawText( "にっぽん再発見！瀬戸内物語", 5, 22, paint );                               // Draw Character
-//        Log.d("MainActivity", "Density: " + bitmap.getDensity());
-
         if(hasGLES20()){
-//            ImageView iv = new ImageView(this);
-//            iv.setImageBitmap(bitmap);
-//            setContentView(iv, new ViewGroup.LayoutParams(100, 100));
-//            RelativeLayout fl = (RelativeLayout) findViewById(R.id.container);
-//            mTestGLSurfaceView = new TestGLSurfaceView(this);
-//            RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-//            rlp.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//            rlp.addRule(RelativeLayout.CENTER_VERTICAL);
-//            fl.addView(mTestGLSurfaceView);
-//            setContentView(mTestGLSurfaceView);
-            setContentView(R.layout.activity_main);
-        }
-        else{
             setContentView(R.layout.activity_main);
         }
 
@@ -69,6 +34,7 @@ public class MainActivity extends Activity {
                 "「にっぽん再発見　瀬戸内物語」私のとっておきの一枚に投稿された写真を紹介する１分ミニ番組。今回は、山口県。更なる投稿も呼びかける。",
                 R.drawable.epg_icon_recording_status_period,
                 R.drawable.epg_dropdown_menu_genre_icon_0_all, true, null);
+        epg.setVisibility(View.INVISIBLE);
     }
 
     private boolean hasGLES20() {

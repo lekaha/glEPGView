@@ -3,7 +3,6 @@ package com.john.glepgviewer;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.util.TypedValue;
 
 /**
@@ -87,7 +86,7 @@ public class EventMinute extends EventText{
 
         }
 
-        Log.d(TAG, "init: getTopVerticeYPoint:" + getTopVerticeYPoint() + " h:" + h);
+//        Log.d(TAG, "init: getTopVerticeYPoint:" + getTopVerticeYPoint() + " h:" + h);
         if(getTopVerticeYPoint() > lower){
             for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
                 VERTEX_DATA[i * DIMENSION + X] = 0f;
@@ -95,7 +94,7 @@ public class EventMinute extends EventText{
             }
         }
         else if(getBottomVerticeYPoint() > lower){
-            Log.d(TAG, "init: Case2");
+//            Log.d(TAG, "init: Case2");
             float r = Math.abs(lower - VERTEX_DATA[3 * DIMENSION + Y])/Math.abs(h);
             VERTEX_DATA[1 * DIMENSION + V] = r;
             VERTEX_DATA[2 * DIMENSION + V] = r;

@@ -3,7 +3,6 @@ package com.john.glepgviewer;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.util.TypedValue;
 
 /**
@@ -122,14 +121,14 @@ public class EventTitle extends EventText {
         VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
 
         if(upper > lower){
-            Log.d(TAG, "init: Case1");
+//            Log.d(TAG, "init: Case1");
             for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
                 VERTEX_DATA[i * DIMENSION + X] = 0f;
                 VERTEX_DATA[i * DIMENSION + Y] = 0f;
             }
         }
         else if( bound > lower){
-            Log.d(TAG, "init: Case2");
+//            Log.d(TAG, "init: Case2");
             float r = Math.abs(lower - VERTEX_DATA[3 * DIMENSION + Y])/Math.abs(h);
             VERTEX_DATA[1 * DIMENSION + V] = r;
             VERTEX_DATA[2 * DIMENSION + V] = r;
@@ -142,10 +141,10 @@ public class EventTitle extends EventText {
             VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
         }
 
-        Log.d(TAG, "init: text size = " + textSize + " height=" + ((int)textSize + lineSpacing) * line);
+//        Log.d(TAG, "init: text size = " + textSize + " height=" + ((int)textSize + lineSpacing) * line);
 
         vertexArray = new VertexArray(VERTEX_DATA);
-        backColor = Color.parseColor("#ff268626");
+//        backColor = Color.parseColor("#ff268626");
         float dy = mContext.getResources().getDisplayMetrics().density + 0.8f;  // Text's density weight
         mTextView = new GLTextView(title, typeface,
                 (int)(textSize * dy),   //Text's size

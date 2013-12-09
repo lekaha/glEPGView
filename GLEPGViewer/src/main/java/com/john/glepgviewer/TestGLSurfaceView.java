@@ -40,15 +40,17 @@ public class TestGLSurfaceView extends GLSurfaceView {
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
-//                mPreviousX = e.getX();
-//                mPreviousY = e.getY();
-                mGLEpgViewRenderer.setMove(
-                        0, 0);
+                mPreviousX = e.getX();
+                mPreviousY = e.getY();
+//                mGLEpgViewRenderer.setMove(
+//                        0, 0);
+//                mGLEpgViewRenderer.setPosition(e.getX() - mPreviousX, e.getY() - mPreviousY);
                 break;
             case MotionEvent.ACTION_UP:
-                mPreviousX = dx;
-                mPreviousY = dy;
-                mGLEpgViewRenderer.setPosition(mPreviousX, mPreviousY);
+                mPreviousX = e.getX();
+                mPreviousY = e.getY();
+//                mGLEpgViewRenderer.setPosition(mPreviousX, mPreviousY);
+                mGLEpgViewRenderer.setPosition(e.getX() - mPreviousX, e.getY() - mPreviousY);
                 break;
             case MotionEvent.ACTION_MOVE:
                 dx = e.getX() - mPreviousX;

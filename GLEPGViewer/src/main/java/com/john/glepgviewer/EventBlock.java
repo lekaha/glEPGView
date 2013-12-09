@@ -148,7 +148,7 @@ public class EventBlock extends EventComponent{
         vertexArray = new VertexArray(VERTEX_DATA);
     }
 
-    public void setPosition(float px, float py){
+    public void set(float px, float py){
         for(int i = 0; i<14; i++){
             VERTEX_DATA[i * DIMENSION + X] += px;
             VERTEX_DATA[i * DIMENSION + Y] += (py);

@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.opengl.GLES20;
 import android.os.Build;
 import android.text.TextPaint;
-import android.util.Log;
 
 import com.john.glepgviewer.helper.CheckErrorHelper;
 import com.john.glepgviewer.helper.TextureHelper;
@@ -153,10 +152,10 @@ public class GLTextView {
         int height  = originHeight;
 
         float size = originSize;
-        Log.d(TAG, "init: project=" + projectionMatrix[0] + "*" + projectionMatrix[5]);
-        Log.d(TAG, "init: scale=" + fontScaleX + "*" + fontScaleY);
-        Log.d(TAG, "init: view =" + width + "*" + height);
-        Log.d(TAG, "init: originSize=" + originSize + " size=" + size);
+//        Log.d(TAG, "init: project=" + projectionMatrix[0] + "*" + projectionMatrix[5]);
+//        Log.d(TAG, "init: scale=" + fontScaleX + "*" + fontScaleY);
+//        Log.d(TAG, "init: view =" + width + "*" + height);
+//        Log.d(TAG, "init: originSize=" + originSize + " size=" + size);
 
         Bitmap bitmap = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_8888);  // Create Bitmap
 //        bitmap.setHasAlpha(true);
