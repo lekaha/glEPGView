@@ -1,7 +1,5 @@
 package com.john.glepgviewer;
 
-import android.util.Log;
-
 /**
  * Created by john on 11/12/13.
  */
@@ -29,7 +27,7 @@ public abstract class EventComponent {
 //    protected Context mContext
 
     public EventComponent(){
-        Log.d(TAG, "ctor: EventComponent");
+//        Log.d(TAG, "ctor: EventComponent");
         init();
     }
 

@@ -195,9 +195,9 @@ public class GLEpgViewRenderer extends GLRenderer {
     private float mPreviousX = 0f;
     private float mPreviousY = 0f;
     public void setMove(float dx, float dy){
-        if((-mWidth <= (dx - mPreviousX) || (0 >= (dx - mPreviousX))))
-            mdX = dx - mPreviousX;
-        if((0 <= (mPreviousY - dy)) || (mHeight >= (mPreviousY - dy)))
+        if((-viewWidth <= (mPreviousX + dx) && (0 >= (mPreviousX + dx))))
+            mdX = mPreviousX + dx;
+        if((0 <= (mPreviousY - dy)) && (viewHeight >= (mPreviousY - dy)))
             mdY = mPreviousY - dy;
         Log.d(TAG, "[setMove] Dx = " + dx + " Dy = " + dy + " PreviousX = " + mPreviousX + " PreviousY = " + mPreviousY + " mDx = " + mdX + " mDy = " + mdY);
 //        glViewport((int)mdX , (int)mdY , mWidth, mHeight);
