@@ -23,6 +23,7 @@ import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glDrawArrays;
 import static android.opengl.GLES20.glEnable;
+import static android.opengl.GLES20.glFlush;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.Matrix.orthoM;
 
@@ -245,8 +246,9 @@ public class GLTextView {
     public void end(){
         // Unbind from the texture.
         glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-//        glDeleteTextures(GLES20.GL_TEXTURE_2D, mTexture);
+//        glDeleteTextures(GLES20.GL_TEXTURE_2D, mTexture, 0);
         glDisable(GLES20.GL_BLEND);
+        glFlush();
     }
 
     public void draw(){

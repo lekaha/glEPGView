@@ -14,7 +14,7 @@ import static android.opengl.GLES20.glDrawArrays;
  */
 public class EventBlock extends EventComponent{
 
-    private final String vertexShaderSource =
+    private final static String vertexShaderSource =
             "uniform mat4 u_Matrix;\n" +
                     "attribute vec4 a_Position;\n" +
                     "attribute vec4 a_Color;\n" +
@@ -25,7 +25,7 @@ public class EventBlock extends EventComponent{
                     "  gl_PointSize = 10.0;\n" +
                     "}";
 
-    private final String fragmentShaderSource =
+    private final static String fragmentShaderSource =
             "precision mediump float;" +
                     "varying vec4 v_Color;" +
                     "void main() {" +
@@ -114,7 +114,8 @@ public class EventBlock extends EventComponent{
                 MIN_EVENT_HEIGHT,
                 mContext.getResources().getDisplayMetrics());
 
-        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
+        if(null != matrix)
+            System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
         float h = mHeight;// * projectionMatrix[Y * 4 + Y];
 
         VERTEX_DATA[1 * DIMENSION + Y] = VERTEX_DATA[3 * DIMENSION + Y] + h;

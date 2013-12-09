@@ -17,6 +17,8 @@ public class GLEventView {
     private EventComponent mEventGenre;
     private EventComponent mEventRecord;
 
+    private float mpX;
+    private float mpY;
     private float mpXdp;
     private float mpYdp;
     private float[] mProjectionMatrix;
@@ -34,6 +36,8 @@ public class GLEventView {
         mContext = context;
     }
 
+
+
     public void bind(
             float x,
             float y,
@@ -46,12 +50,14 @@ public class GLEventView {
             boolean isFavorGenre,
             float[] projectionMatrix){
 
+        mpX = x;
+        mpY = y;
         mpXdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                        x,
-                        mContext.getResources().getDisplayMetrics());
+                    mpX,
+                    mContext.getResources().getDisplayMetrics());
         mpYdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                        y,
-                        mContext.getResources().getDisplayMetrics());
+                    mpY,
+                    mContext.getResources().getDisplayMetrics());
         mProjectionMatrix = projectionMatrix;
         minute = eventMinute;
         title = eventTitle;
@@ -128,6 +134,9 @@ public class GLEventView {
         this.height = height;
         bind(x, y, merge, eventMinute, eventTitle, eventDecription, recordStatusResId, eventGenreResId, isFavorGenre, projectionMatrix);
     }
+
+    public float getX(){return mpXdp;}
+    public float getY(){return mpYdp;}
 
     public void draw(){
         if(null == mEventBlock){
