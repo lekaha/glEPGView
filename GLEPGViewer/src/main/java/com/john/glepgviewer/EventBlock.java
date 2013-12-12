@@ -47,14 +47,13 @@ public class EventBlock extends EventComponent{
     protected static final int POSITION_COMPONENT_COUNT = 2;
     protected static final int COLOR_COMPONENT_COUNT = 3;
     //    protected static final int DIMENSION = (POSITION_COMPONENT_COUNT + COLOR_COMPONENT_COUNT);
-    private final float[] projectionMatrix = new float[16];
+    private float[] projectionMatrix = new float[16];
 
 
     protected ColorShaderProgram colorProgram;
     //    protected VertexArray vertexArray;
 
-    private int mMerge;
-    private float mHeight;
+
     private Context mContext;
 
     @Override
@@ -99,24 +98,26 @@ public class EventBlock extends EventComponent{
 
     }
 
-    private float mWidth;
     public EventBlock(Context context, int merge, float height, float[] matrix){
 //        super();
         mContext = context;
-        mMerge = merge ;
-        mHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+//        mMerge = merge;
+        float h = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 height,
                 mContext.getResources().getDisplayMetrics());
-        mWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+        float w = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 145f,
                 mContext.getResources().getDisplayMetrics());
         float minHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 MIN_EVENT_HEIGHT,
                 mContext.getResources().getDisplayMetrics());
 
+//        if(null != matrix)
+//            System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
         if(null != matrix)
-            System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
-        float h = mHeight;// * projectionMatrix[Y * 4 + Y];
+            projectionMatrix = matrix;
+
+//        float h = mHeight;// * projectionMatrix[Y * 4 + Y];
 
         VERTEX_DATA[1 * DIMENSION + Y] = VERTEX_DATA[3 * DIMENSION + Y] + h;
         VERTEX_DATA[2 * DIMENSION + Y] = VERTEX_DATA[3 * DIMENSION + Y] + h;
@@ -126,18 +127,19 @@ public class EventBlock extends EventComponent{
         VERTEX_DATA[12 * DIMENSION + Y] = VERTEX_DATA[3 * DIMENSION + Y] + h;
         VERTEX_DATA[13 * DIMENSION + Y] = VERTEX_DATA[3 * DIMENSION + Y] + h;
         VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
+        mHeight = VERTEX_DATA[2 * DIMENSION + Y] - VERTEX_DATA[3 * DIMENSION + Y];
+//        float w = mWidth;///640f;
 
-        float w = mWidth;///640f;
-
-        VERTEX_DATA[2 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (mMerge * w);
-        VERTEX_DATA[3 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (mMerge * w);
-        VERTEX_DATA[9 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (mMerge * w);
-        VERTEX_DATA[10 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (mMerge * w);
-        VERTEX_DATA[11 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (mMerge * w);
-        VERTEX_DATA[12 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (mMerge * w);
+        VERTEX_DATA[2 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (merge * w);
+        VERTEX_DATA[3 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (merge * w);
+        VERTEX_DATA[9 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (merge * w);
+        VERTEX_DATA[10 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (merge * w);
+        VERTEX_DATA[11 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (merge * w);
+        VERTEX_DATA[12 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] + (merge * w);
         VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[2 * DIMENSION + X] + VERTEX_DATA[1 * DIMENSION + X])/2f;
+        mWidth = VERTEX_DATA[2 * DIMENSION + X] - VERTEX_DATA[1 * DIMENSION + X];
 
-        if(mHeight <= minHeight){
+        if(h <= minHeight){
             for(int i = 0; i<6; i++){
                 VERTEX_DATA[i * DIMENSION + R] = miniBackgroundColro.Red;
                 VERTEX_DATA[i * DIMENSION + G] = miniBackgroundColro.Green;
@@ -149,11 +151,41 @@ public class EventBlock extends EventComponent{
         vertexArray = new VertexArray(VERTEX_DATA);
     }
 
-    public void set(float px, float py){
-        for(int i = 0; i<14; i++){
-            VERTEX_DATA[i * DIMENSION + X] += px;
-            VERTEX_DATA[i * DIMENSION + Y] += (py);
-        }
+    public void move(float px, float py){
+//        for(int i = 0; i<14; i++){
+
+        VERTEX_DATA[1 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[2 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[3 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[4 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[5 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[1 * DIMENSION + X] + VERTEX_DATA[2 * DIMENSION + X])/2f;
+        VERTEX_DATA[6 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[7 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[10 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[11 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[8 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[9 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[12 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[13 * DIMENSION + X] = px + pstX;
+
+        VERTEX_DATA[1 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[2 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[3 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[4 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[5 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
+        VERTEX_DATA[6 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[7 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[8 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[9 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[10 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[11 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[12 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[13 * DIMENSION + Y] = py + (pstY + mHeight);
+
+
+//        }
 
         vertexArray.commit();
     }

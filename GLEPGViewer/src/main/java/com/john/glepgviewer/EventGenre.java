@@ -25,6 +25,8 @@ public class EventGenre extends EventComponent{
 
     protected GLImageView mTextView;
 //    protected VertexArray vertexArray;
+    private float mLayoutPaddingTop;
+    private float mLayoutPaddingLeft;
 
     @Override
     public void init(){
@@ -46,7 +48,8 @@ public class EventGenre extends EventComponent{
 
     public EventGenre(Context context, String resPath, float[] projectionMatrix){
         float[] matrix = new float[16];
-        System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
+//        System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
+        this.projectionMatrix = projectionMatrix;
 
         vertexArray = new VertexArray(VERTEX_DATA);
         mTextView = new GLImageView(context, resPath, 30, 30, vertexArray, matrix);
@@ -54,7 +57,9 @@ public class EventGenre extends EventComponent{
     }
 
     public EventGenre(Context context, int resId, float left, float right, float upper, float lower, float[] matrix){
-        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
+//        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
+        projectionMatrix = matrix;
+
         float width  = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 GENRE_WIDTH,
                 context.getResources().getDisplayMetrics());
@@ -64,6 +69,13 @@ public class EventGenre extends EventComponent{
         float paddingBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 LAYOUT_PADDING_BOTTOM,
                 context.getResources().getDisplayMetrics());
+        mLayoutPaddingTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                GENRE_MARGIN_TOP,
+                context.getResources().getDisplayMetrics());
+        mLayoutPaddingLeft = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                                GENRE_MARGIN_RIGHT,
+                                context.getResources().getDisplayMetrics()) + left;
+
         float l = lower + paddingBottom;
 
         for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
@@ -97,12 +109,35 @@ public class EventGenre extends EventComponent{
             VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
         }
 
+        mHeight = VERTEX_DATA[2 * DIMENSION + Y] - VERTEX_DATA[3 * DIMENSION + Y];
+        mWidth = VERTEX_DATA[2 * DIMENSION + X] - VERTEX_DATA[1 * DIMENSION + X];
+
         vertexArray = new VertexArray(VERTEX_DATA);
         mTextView = new GLImageView(context, resId, false, (int)width, (int)height, 0, 0, vertexArray, matrix);
     }
 
     @Override
     public void set(float px, float py){
+        pstY = mLayoutPaddingTop + py;
+        pstX = mLayoutPaddingLeft + px;
+    }
+
+    @Override
+    public void move(float px, float py){
+        VERTEX_DATA[1 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[2 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[3 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[4 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[5 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[1 * DIMENSION + X] + VERTEX_DATA[2 * DIMENSION + X])/2f;
+
+        VERTEX_DATA[1 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[2 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[3 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[4 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[5 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
+
         vertexArray.commit();
     }
 

@@ -16,6 +16,8 @@ public class EventTitle extends EventText {
 
     private static final float WIDTH = 145f;
 
+    private float mLayoutPaddingLeft;
+    private float mUpperBound;
     @Override
     protected void init(boolean nothing){
         float[] vertexData = {
@@ -48,7 +50,8 @@ public class EventTitle extends EventText {
                       float upperBound, float lowerBound, float rightBound,
                       float[] matrix){
         mContext = context;
-        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
+//        System.arraycopy(matrix, 0, projectionMatrix, 0, projectionMatrix.length);
+        projectionMatrix = matrix;
 
         float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                             TITLE_SIZE,
@@ -63,6 +66,10 @@ public class EventTitle extends EventText {
         float paddingBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     LAYOUT_PADDING_BOTTOM,
                     mContext.getResources().getDisplayMetrics());
+        mLayoutPaddingLeft = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                LAYOUT_PADDING_LEFT,
+                mContext.getResources().getDisplayMetrics());
+        mUpperBound = upperBound;
         float upper = (0f == upperBound)? 0f: upperBound + 0.00f;
         float lower = lowerBound - paddingBottom;
         float size = textSize;
@@ -142,6 +149,8 @@ public class EventTitle extends EventText {
         }
 
 //        Log.d(TAG, "init: text size = " + textSize + " height=" + ((int)textSize + lineSpacing) * line);
+        mHeight = VERTEX_DATA[2 * DIMENSION + Y] - VERTEX_DATA[3 * DIMENSION + Y];
+        mWidth = VERTEX_DATA[2 * DIMENSION + X] - VERTEX_DATA[1 * DIMENSION + X];
 
         vertexArray = new VertexArray(VERTEX_DATA);
 //        backColor = Color.parseColor("#ff268626");
@@ -158,9 +167,27 @@ public class EventTitle extends EventText {
 
     @Override
     public void set(float px, float py){
-        for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
-            VERTEX_DATA[i * DIMENSION + X] += px;
-        }
+        pstX = px + mLayoutPaddingLeft;
+        pstY = py + mUpperBound;
+    }
+
+
+    @Override
+    public void move(float px, float py){
+        VERTEX_DATA[1 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[2 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[3 * DIMENSION + X] = px + (pstX + mWidth);
+        VERTEX_DATA[4 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[5 * DIMENSION + X] = px + pstX;
+        VERTEX_DATA[0 * DIMENSION + X] = (VERTEX_DATA[1 * DIMENSION + X] + VERTEX_DATA[2 * DIMENSION + X])/2f;
+
+        VERTEX_DATA[1 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[2 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[3 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[4 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[5 * DIMENSION + Y] = py + (pstY + mHeight);
+        VERTEX_DATA[0 * DIMENSION + Y] = (VERTEX_DATA[2 * DIMENSION + Y] + VERTEX_DATA[3 * DIMENSION + Y])/2f;
+
         vertexArray.commit();
     }
 

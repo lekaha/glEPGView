@@ -228,19 +228,6 @@ public class GLTextView {
         GLES20.glUniform1i(mTextureShaderProgram.getTextureCoordinatesAttributeLocation(), 0);
         GLES20.glEnableVertexAttribArray(mTextureShaderProgram.getTextureCoordinatesAttributeLocation());
 
-        // create a model matrix based on x, y and angleDeg
-//        float[] modelMatrix = new float[16];
-//        Matrix.setIdentityM(modelMatrix, 0);
-//        Matrix.translateM(modelMatrix, 0, 1, 1, 1);
-//        Matrix.rotateM(modelMatrix, 0, 0, 0, 0, 1);
-//        Matrix.rotateM(modelMatrix, 0, 0, 1, 0, 0);
-//        Matrix.rotateM(modelMatrix, 0, 0, 0, 1, 0);
-//        orthoM(modelMatrix, 0, -1f, 1f, -0.3f, 0.3f, -1f, 1f);
-//
-//        // bind MVP matrices array to shader
-//        glUniformMatrix4fv(mTextureShaderProgram.getMatrixAttributeLocation(), 1, false, modelMatrix, 0);
-//        GLES20.glEnableVertexAttribArray(mTextureShaderProgram.getMatrixAttributeLocation());
-
     }
 
     public void end(){
@@ -275,14 +262,6 @@ public class GLTextView {
 
 //        mTextureShaderProgram.setUniforms(projectionMatrix, mTexture);
         // create a model matrix based on x, y and angleDeg
-//        float[] modelMatrix = new float[16];
-//        Matrix.setIdentityM(modelMatrix, 0);
-//        Matrix.translateM(modelMatrix, 0, 1, 1, 1);
-//        Matrix.rotateM(modelMatrix, 0, 0, 0, 0, 1);
-//        Matrix.rotateM(modelMatrix, 0, 0, 1, 0, 0);
-//        Matrix.rotateM(projectionMatrix, 0, 45, 0, 1, 0);
-
-//        Matrix.setLookAtM(projectionMatrix, 0, 0f, 0.5f, 0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         glUniformMatrix4fv(mTextureShaderProgram.getMatrixAttributeLocation(), 1, false, projectionMatrix, 0);
     }
 

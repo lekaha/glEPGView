@@ -19,6 +19,9 @@ public class EventRecord extends EventComponent{
 //    protected VertexArray vertexArray;
     protected boolean isClipping = false;
 
+    private float mRightBound;
+    private float mUpperBound;
+
     @Override
     public void init(){
         DIMENSION = (POSITION_COMPONENT_COUNT + TEXTURE_COMPONENT_COUNT);
@@ -49,19 +52,23 @@ public class EventRecord extends EventComponent{
         VERTEX_DATA = vertexData;
     }
 
-    public EventRecord(Context context, String resPath, float[] projectionMatrix){
-        float[] matrix = new float[16];
-        System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
+    public EventRecord(Context context, String resPath, float[] matrix){
+//        float[] matrix = new float[16];
+//        System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
+        projectionMatrix = matrix;
+
         vertexArray = new VertexArray(VERTEX_DATA);
-        mTextView = new GLImageView(context, resPath, 30, 30, vertexArray, matrix);
+        mTextView = new GLImageView(context, resPath, 30, 30, vertexArray, projectionMatrix);
 //        mTextView = new GLTextView(minute, typeface, 12, 64, 64, vertexArray, matrix);
     }
 
     public EventRecord(Context context, int resId,
                 float upperBound, float lowerBound, float rightBound,
-                float[] projectionMatrix){
-        float[] matrix = new float[16];
-        System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
+                float[] matrix){
+//        float[] matrix = new float[16];
+//        System.arraycopy(projectionMatrix, 0, matrix, 0, matrix.length);
+        projectionMatrix = matrix;
+
         float width  = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 WIDTH,
                 context.getResources().getDisplayMetrics());
@@ -70,7 +77,8 @@ public class EventRecord extends EventComponent{
                 context.getResources().getDisplayMetrics());
         width = WIDTH;
         height = HEIGHT;
-
+        mRightBound = rightBound;
+        mUpperBound = upperBound;
 //        Log.d(TAG, "init: " + getBottomVerticeYPoint() + " vs " + lowerBound + " vs " + rightBound);
         isClipping = false;
 
@@ -78,10 +86,10 @@ public class EventRecord extends EventComponent{
             for(int i = 0; i<3; i++){
                 VERTEX_DATA[i * DIMENSION + X] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         VERTEX_DATA[i * DIMENSION + X],
-                        context.getResources().getDisplayMetrics()) + rightBound;
+                        context.getResources().getDisplayMetrics()) + mRightBound;
                 VERTEX_DATA[i * DIMENSION + Y] = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         VERTEX_DATA[i * DIMENSION + Y],
-                        context.getResources().getDisplayMetrics()) + upperBound;
+                        context.getResources().getDisplayMetrics()) + mUpperBound;
             }
         }
 
@@ -95,14 +103,28 @@ public class EventRecord extends EventComponent{
 //        float w = Math.abs(VERTEX_DATA[1 * DIMENSION + X] - VERTEX_DATA[2 * DIMENSION + X]);
 //        VERTEX_DATA[0 * DIMENSION + X] = VERTEX_DATA[1 * DIMENSION + X] = rightBound;
 //        VERTEX_DATA[2 * DIMENSION + X] = VERTEX_DATA[0 * DIMENSION + X] - w;
-
+        mHeight = VERTEX_DATA[0 * DIMENSION + Y] - VERTEX_DATA[1 * DIMENSION + Y];
+        mWidth = VERTEX_DATA[2 * DIMENSION + X] - VERTEX_DATA[1 * DIMENSION + X];
 
         vertexArray = new VertexArray(VERTEX_DATA);
-        mTextView = new GLImageView(context, resId, false, (int)width, (int)height, 0, 0, vertexArray, matrix);
+        mTextView = new GLImageView(context, resId, false, (int)width, (int)height, 0, 0, vertexArray, projectionMatrix);
     }
 
     @Override
     public void set(float px, float py){
+        pstY = py;
+        pstX = px + mRightBound - mWidth;
+    }
+
+    @Override
+    public void move(float px, float py){
+        VERTEX_DATA[0 * DIMENSION + X] = px + pstX + mWidth;
+        VERTEX_DATA[1 * DIMENSION + X] = px + pstX + mWidth;
+        VERTEX_DATA[2 * DIMENSION + X] = px + pstX;
+
+        VERTEX_DATA[0 * DIMENSION + Y] = py + pstY + (mHeight);
+        VERTEX_DATA[1 * DIMENSION + Y] = py + pstY;
+        VERTEX_DATA[2 * DIMENSION + Y] = py + pstY;
         vertexArray.commit();
     }
 

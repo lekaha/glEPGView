@@ -23,7 +23,12 @@ public abstract class EventComponent {
     protected int STRIDE;
     protected float[] VERTEX_DATA;
     protected VertexArray vertexArray;
-    protected final float[] projectionMatrix = new float[16];
+    protected float[] projectionMatrix;
+
+    protected float mHeight;
+    protected float mWidth;
+    protected float pstX;
+    protected float pstY;
 //    protected Context mContext
 
     public EventComponent(){
@@ -42,9 +47,19 @@ public abstract class EventComponent {
     public float getRightVerticeXPoint(){return 0f;}
 
     public void set(float px, float py){
+//        for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
+//            VERTEX_DATA[i * DIMENSION + X] += px;
+//            VERTEX_DATA[i * DIMENSION + Y] += (-py);
+//        }
+//        vertexArray.commit();
+        pstX = px;
+        pstY = py;
+    }
+
+    public void move(float x, float y){
         for(int i = 0; i<(VERTEX_DATA.length/DIMENSION); i++){
-            VERTEX_DATA[i * DIMENSION + X] += px;
-            VERTEX_DATA[i * DIMENSION + Y] += (-py);
+            VERTEX_DATA[i * DIMENSION + X] += x;
+            VERTEX_DATA[i * DIMENSION + Y] += (-y);
         }
         vertexArray.commit();
     }

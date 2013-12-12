@@ -58,6 +58,9 @@ public class GLEventView {
         mpYdp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     mpY,
                     mContext.getResources().getDisplayMetrics());
+//        mpXdp = mpX;
+//        mpYdp = mpY;
+
         mProjectionMatrix = projectionMatrix;
         minute = eventMinute;
         title = eventTitle;
@@ -146,11 +149,6 @@ public class GLEventView {
             mEventBlock.set(mpXdp, mpYdp);
         }
 
-        if(null != mEventBlock){
-            mEventBlock.bindData();
-            mEventBlock.draw();
-        }
-
         if(null == mEventMinute){
             mEventMinute = new EventMinute(mContext, minute,
                     FontHandle.getInstance().getFontTypeface(),
@@ -158,12 +156,6 @@ public class GLEventView {
                     mEventBlock.getBottomVerticeYPoint(),
                     mProjectionMatrix);
             mEventMinute.set(mpXdp, mpYdp);
-        }
-
-        if(null != mEventMinute){
-//            mEventMinute.set(mpXdp, mpYdp);
-            mEventMinute.bindData();
-            mEventMinute.draw();
         }
 
         if(null == mEventGenre){
@@ -179,25 +171,15 @@ public class GLEventView {
 //                ((EventGenre)mEventGenre).setMarginLeft(mEventMinute.getRightVerticeXPoint());
             }
         }
-        if(null != mEventGenre){
-//            mEventGenre.set(mpXdp, mpYdp);
-            mEventGenre.bindData();
-            mEventGenre.draw();
-        }
 
         if(null == mEventRecord){
-            mEventRecord = new EventRecord(mContext,
-                recordResId,
-                mEventBlock.getTopVerticeYPoint(),
-                mEventBlock.getBottomVerticeYPoint(),
-                mEventBlock.getRightVerticeXPoint(),
-                mProjectionMatrix);
-            mEventRecord.set(mpXdp, mpYdp);
-        }
-        if(null !=  mEventRecord){
+//            mEventRecord = new EventRecord(mContext,
+//                recordResId,
+//                mEventBlock.getTopVerticeYPoint(),
+//                mEventBlock.getBottomVerticeYPoint(),
+//                mEventBlock.getRightVerticeXPoint(),
+//                mProjectionMatrix);
 //            mEventRecord.set(mpXdp, mpYdp);
-            mEventRecord.bindData();
-            mEventRecord.draw();
         }
 
         if(null == mEventTitle){
@@ -210,11 +192,6 @@ public class GLEventView {
                 mEventBlock.getRightVerticeXPoint(),
                 mProjectionMatrix);
             mEventTitle.set(mpXdp, mpYdp);
-        }
-        if(null != mEventTitle){
-//            mEventTitle.set(mpXdp, mpYdp);
-            mEventTitle.bindData();
-            mEventTitle.draw();
         }
 
         if(null == mEventDescription){
@@ -229,8 +206,43 @@ public class GLEventView {
                 mProjectionMatrix);
             mEventDescription.set(mpXdp, mpYdp);
         }
+
+        draw(0f, 0f);
+    }
+
+    public void draw(float x, float y){
+        if(null != mEventBlock){
+            mEventBlock.move(x, y);
+            mEventBlock.bindData();
+            mEventBlock.draw();
+        }
+
+        if(null != mEventMinute){
+            mEventMinute.move(x, y);
+            mEventMinute.bindData();
+            mEventMinute.draw();
+        }
+
+        if(null != mEventGenre){
+            mEventGenre.move(x, y);
+            mEventGenre.bindData();
+            mEventGenre.draw();
+        }
+
+        if(null !=  mEventRecord){
+            mEventRecord.move(x, y);
+            mEventRecord.bindData();
+            mEventRecord.draw();
+        }
+
+        if(null != mEventTitle){
+            mEventTitle.move(x, y);
+            mEventTitle.bindData();
+            mEventTitle.draw();
+        }
+
         if(null != mEventDescription){
-//            mEventDescription.set(mpXdp, mpYdp);
+            mEventDescription.move(x, y);
             mEventDescription.bindData();
             mEventDescription.draw();
         }
