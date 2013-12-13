@@ -142,6 +142,7 @@ public class GLTextView {
 
     }
 
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void init(String text, Typeface typeface,
                       int originSize, int originWidth, int originHeight,
@@ -158,7 +159,7 @@ public class GLTextView {
 //        Log.d(TAG, "init: view =" + width + "*" + height);
 //        Log.d(TAG, "init: originSize=" + originSize + " size=" + size);
 
-        Bitmap bitmap = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_8888);  // Create Bitmap
+        Bitmap bitmap = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_4444);  // Create Bitmap
 //        bitmap.setHasAlpha(true);
 //        bitmap.setHasMipMap(true);
         bitmap.eraseColor(backgroundColor);                // Set Transparent Background (ARGB)
