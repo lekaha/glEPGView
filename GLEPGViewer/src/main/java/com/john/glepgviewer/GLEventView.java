@@ -3,8 +3,6 @@ package com.john.glepgviewer;
 import android.content.Context;
 import android.util.TypedValue;
 
-import com.john.glepgviewer.util.FontHandle;
-
 /**
  * Created by john on 11/15/13.
  */
@@ -153,14 +151,14 @@ public class GLEventView {
             mEventBlock.set(mpXdp, mpYdp);
         }
 
-        if(null == mEventMinute){
-            mEventMinute = new EventMinute(mContext, minute,
-                    FontHandle.getInstance().getFontTypeface(),
-                    mEventBlock.getTopVerticeYPoint(),
-                    mEventBlock.getBottomVerticeYPoint(),
-                    mProjectionMatrix);
-            mEventMinute.set(mpXdp, mpYdp);
-        }
+//        if(null == mEventMinute){
+//            mEventMinute = new EventMinute(mContext, minute,
+//                    FontHandle.getInstance().getFontTypeface(),
+//                    mEventBlock.getTopVerticeYPoint(),
+//                    mEventBlock.getBottomVerticeYPoint(),
+//                    mProjectionMatrix);
+//            mEventMinute.set(mpXdp, mpYdp);
+//        }
 //
 //        if(null == mEventGenre){
 //            if(favorGenre){

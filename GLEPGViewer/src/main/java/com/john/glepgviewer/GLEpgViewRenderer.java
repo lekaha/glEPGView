@@ -145,45 +145,9 @@ public class GLEpgViewRenderer extends GLRenderer {
                     float x = 0f;
                     float y = 0f;
                     Random r = new Random(System.currentTimeMillis());
-
-
-
                     for(int i = 0, j = 0; i<SIZE; i++, j++){
-                        //chessboard layout
-    //                    if((i != 0) && ((i % 20) == 0)){
-    //                        y += 50f;
-    //                        j = -1;
-    //                    }
-    //                    else{
-    //                        int interval = 60;
-    //                        mGLEventViewArray[i] = new GLEventView(mContext);
-    //                        mGLEventViewArray[i].bind(
-    //                                0f + ((j) * interval), y,
-    //                                1,
-    //                                "00",
-    //                                "にっぽん再発見！瀬戸内物語　私のとっておきの１枚　写真募集「山口」",
-    //                                "「にっぽん再発見　瀬戸内物語」私のとっておきの一枚に投稿された写真を紹介する１分ミニ番組。今回は、山口県。更なる投稿も呼びかける。",
-    //                                R.drawable.epg_icon_recording_status_period,
-    //                                R.drawable.epg_dropdown_menu_genre_icon_0_all,
-    //                                true,
-    //                                projectionMatrix);
-    //                    }
-
                         //Simulated EPG layout
                         float h = (float)(Math.abs(r.nextInt()) % 280) + 20f;
-//                        mGLEventViewArray[i] = new GLEventView(mContext);
-//                        mGLEventViewArray[i].bind(
-////                                (x != 0)?x + 1:x, (y != 0)?y + 1:y,
-//                                x, y,
-//                                1,
-//                                h,
-//                                String.format("%02d", i%100),
-//                                "にっぽん再発見！瀬戸内物語　私のとっておきの１枚　写真募集「山口」",
-//                                "「にっぽん再発見　瀬戸内物語」私のとっておきの一枚に投稿された写真を紹介する１分ミニ番組。今回は、山口県。更なる投稿も呼びかける。",
-//                                R.drawable.epg_icon_recording_status_period,
-//                                R.drawable.epg_dropdown_menu_genre_icon_0_all,
-//                                true,
-//                                projectionMatrix);
                         mEventInfoArray[i] = new EventInfo(
                                 i,
                                 x, y, 1, h,
@@ -297,14 +261,11 @@ public class GLEpgViewRenderer extends GLRenderer {
 
         if((-3 <= (mPreviousY - dy)) && ((HEIGHT - viewHeight) >= (mPreviousY - dy)))
             mdY = mPreviousY - dy;
-//        Log.d(TAG, "[setMove] Dx = " + dx + " Dy = " + dy + " PreviousX = " + mPreviousX + " PreviousY = " + mPreviousY + " mDx = " + mdX + " mDy = " + mdY);
-//        Log.d(TAG, "[setMove] mDx = " + mdX + " mDy = " + mdY);
     }
 
     public void setPosition(float x, float y){
         mPreviousX = mdX + x;
         mPreviousY = mdY - y;
-//        Log.d(TAG, "[setPosition] setMove x = " + mdX + " y = " + mdY);
     }
 
 
